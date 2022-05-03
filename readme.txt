@@ -1,0 +1,5 @@
+-   Platforms:
+    -       Windows
+    -       Linux
+    -       Mac OS X
+    -       WebAssembly

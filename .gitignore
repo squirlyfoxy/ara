@@ -1,0 +1,5 @@
+build
+bin/gui
+bin/libengine.so
+
+src/include/version.hpp

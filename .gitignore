@@ -2,5 +2,6 @@ build
 bin/gui
 bin/libengine.so
 bin/libglad.so
+bin/imgui.ini
 
 src/include/version.hpp

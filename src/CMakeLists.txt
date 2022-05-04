@@ -23,3 +23,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
 # add subdirectories (engine, gui)
 add_subdirectory(engine)
 add_subdirectory(gui)
+
+add_subdirectory(lib/glfw)
+add_subdirectory(lib/glad)
+
+# include global libraries
+include_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
+)

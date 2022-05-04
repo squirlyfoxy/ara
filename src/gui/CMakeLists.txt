@@ -4,14 +4,20 @@ project(gui)
 # include header files
 include_directories(include)
 include_directories(../include)
+include_directories(../engine/include)
 
-# source files (all .cpp files in the src directory)
+# source files (all .cpp files in the src and lib directories)
 file(GLOB_RECURSE SRCS 
     src/*.cpp
     src/*/*.cpp
     src/*/*/*.cpp
     src/*/*/*/*.cpp
+    lib/imgui/*.cpp
+    lib/imgui/backends/*.cpp
 )
 
+# imgui library include
+include_directories(lib/imgui)
+
 add_executable(gui main.cpp ${SRCS})
-target_link_libraries(gui engine)
+target_link_libraries(gui engine glad)

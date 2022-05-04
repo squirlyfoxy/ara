@@ -14,5 +14,7 @@ file(GLOB_RECURSE SRCS
 )
 
 # will build as a dynamic library
-
 add_library(engine SHARED ${SRCS})
+
+# link against:
+target_link_libraries(engine glad glfw)

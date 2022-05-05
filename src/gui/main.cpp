@@ -7,6 +7,8 @@
 // GUI
 #include "gui_menu.h"
 
+#include "project_manager.h"
+
 #include <iostream>
 
 // ARA includes
@@ -37,7 +39,7 @@ int main() {
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-            gui_render_menu();
+                gui_render_menu();
 
             ImGui::Render();
         }
@@ -47,6 +49,15 @@ int main() {
         []() {
             // End imgui frame
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
+    );
+
+    window.SetDestroy(
+        []() {
+            // Cleanup code goes here for editor
+            ImGui_ImplOpenGL3_Shutdown();
+            ImGui_ImplGlfw_Shutdown();
+            ImGui::DestroyContext();
         }
     );
 

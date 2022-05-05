@@ -6,6 +6,9 @@ include_directories(include)
 include_directories(../include)
 include_directories(../engine/include)
 
+# glm
+include_directories(../lib/glm)
+
 # source files (all .cpp files in the src and lib directories)
 file(GLOB_RECURSE SRCS 
     src/*.cpp

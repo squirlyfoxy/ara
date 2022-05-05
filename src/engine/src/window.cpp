@@ -19,6 +19,8 @@ namespace ara
 
     Window::~Window()
     {
+        if (mDestroySet) mDestroy();
+
         glfwDestroyWindow(mWindow);
         glfwTerminate();
     }
@@ -70,28 +72,34 @@ namespace ara
     {
         while (!glfwWindowShouldClose(mWindow))
         {
-            if (mRenderUpdateSet) mRenderUpdate();
+            if (mRenderStartSet) mRenderStart();
 
             glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if (mRenderSet) mRender();
+            if (mRenderEndSet) mRenderEnd();
 
             glfwSwapBuffers(mWindow);
             glfwPollEvents();
         }
     }
 
-    void Window::SetRenderStart(std::function<void()> renderUpdate)
+    void Window::SetRenderStart(std::function<void()> render)
     {
-        mRenderUpdate = renderUpdate;
-        mRenderUpdateSet = true;
+        mRenderStart = render;
+        mRenderStartSet = true;
     }
 
     void Window::SetRenderEnd(std::function<void()> render)
     {
-        mRender = render;
-        mRenderSet = true;
+        mRenderEnd = render;
+        mRenderEndSet = true;
+    }
+
+    void Window::SetDestroy(std::function<void()> destroy)
+    {
+        mDestroy = destroy;
+        mDestroySet = true;
     }
 
     GLFWwindow* Window::GetWindow() const

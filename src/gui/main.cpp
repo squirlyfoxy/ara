@@ -20,6 +20,8 @@ int main() {
     // Create a window
     ara::Window window(800, 600, "ARA Window");
 
+    GetProjectManager()->AddProject(ara::Project("test"));
+
     // Initialize the ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

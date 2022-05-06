@@ -3,5 +3,6 @@ bin/gui
 bin/libengine.so
 bin/libglad.so
 bin/imgui.ini
+bin/projects/*/*.ara
 
 src/include/version.hpp

@@ -18,6 +18,8 @@ private:
     std::string mCurrentProject;
 
     std::map<std::string, ara::Project> mProjects;
+
+    void CreateProjectEnviroment(ara::Project project);
 };
 
 ProjectManager* GetProjectManager();

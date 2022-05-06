@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <fstream>
 
 #include "commons.h"
 
@@ -21,12 +22,20 @@ namespace ara {
         // Getters
 
         const std::string& GetName() const; // Get the name of the project
+        const std::chrono::system_clock::time_point& GetCreationTime() const; // Get the creation time of the project
+
+        // Setters
+
+        void SetBasePath(const std::string& basePath); // Set the base path of the project
 
         // All scenes in the project
         std::vector<Scene> gScenes;
 
+        static void InitializeBasicProject(std::ofstream *fs, const Project& project);
+
     private:
         std::string mName;
+        std::string mBasePath;
         std::chrono::system_clock::time_point mCreationTime;    // When the project was created
     };
 

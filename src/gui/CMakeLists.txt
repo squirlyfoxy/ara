@@ -23,4 +23,4 @@ file(GLOB_RECURSE SRCS
 include_directories(lib/imgui)
 
 add_executable(gui main.cpp ${SRCS})
-target_link_libraries(gui engine glad)
+target_link_libraries(gui engine glad SQLiteCpp)

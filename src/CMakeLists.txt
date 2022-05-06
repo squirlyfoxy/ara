@@ -26,6 +26,7 @@ add_subdirectory(gui)
 
 add_subdirectory(lib/glfw)
 add_subdirectory(lib/glad)
+add_subdirectory(lib/SQLiteCpp)
 
 # include global libraries
 include_directories(

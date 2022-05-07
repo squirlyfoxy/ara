@@ -14,6 +14,8 @@ public:
     void AddProject(ara::Project project);
     int GetProjectCount();
 
+    std::map<std::string, ara::Project> GetProjects();
+
 private:
     std::string mCurrentProject;
 

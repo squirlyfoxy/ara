@@ -19,14 +19,19 @@ namespace ara {
         Project(const std::string& name);
         ~Project();
 
+        bool Validate();
+
         // Getters
 
         const std::string& GetName() const; // Get the name of the project
+        const std::string& GetBasePath() const; // Get the base path of the project
         const std::chrono::system_clock::time_point& GetCreationTime() const; // Get the creation time of the project
 
         // Setters
 
+        void SetName(const std::string& name); // Set the name of the project
         void SetBasePath(const std::string& basePath); // Set the base path of the project
+        void SetCreationTime(const std::chrono::system_clock::time_point& creationTime); // Set the creation time of the project
 
         // All scenes in the project
         std::vector<Scene> gScenes;

@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 #include <SQLiteCpp/SQLiteCpp.h>
 
@@ -14,7 +15,7 @@ ProjectManager::ProjectManager() {
     SQLite::Database editor_db("editor_db.db3", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 
     // Create the projects table if it doesn't exist
-    editor_db.exec("CREATE TABLE IF NOT EXISTS Projects (Name TEXT PRIMARY KEY, Path TEXT, Last_Opened TEXT)");
+    editor_db.exec("CREATE TABLE IF NOT EXISTS Projects (Name TEXT PRIMARY KEY, Path TEXT, Creation_Time TEXT)");
 
     // Get all projects from the database
     SQLite::Statement query(editor_db, "SELECT * FROM Projects");
@@ -25,9 +26,14 @@ ProjectManager::ProjectManager() {
         // Get the project path
         std::string projectPath = query.getColumn(1);
 
+        // Get the project creation time
+        std::string projectCreationTime = query.getColumn(2);
+
         // Create a new project
-        ara::Project project(projectName);
+        ara::Project project;
+        project.SetName(projectName);
         project.SetBasePath(projectPath);
+        project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoul(projectCreationTime)));
 
         // Add the project to the map
         mProjects[projectName] = project;
@@ -86,6 +92,10 @@ void ProjectManager::AddProject(ara::Project project) {
 
     // Add the project to the list of projects
     mProjects[project.GetName()] = project;
+}
+
+std::map<std::string, ara::Project> ProjectManager::GetProjects() {
+    return mProjects;
 }
 
 ProjectManager* GetProjectManager() {

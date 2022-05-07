@@ -10,6 +10,7 @@
 bool gui_help_about_open = false;
 bool gui_new_project_open = false;
 bool gui_project_open_popup_open = false;
+std::string gui_project_open_popup_project_name = "";
 
 void gui_render_help() {
     // No Resize
@@ -27,11 +28,36 @@ void gui_new_project() {
 
 void gui_open_project() {
     // No Resize
-    ImGui::Begin("Open Project", &gui_project_open_popup_open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Open Project", &gui_project_open_popup_open, ImGuiWindowFlags_NoCollapse);
         if (GetProjectManager()->GetProjectCount() == 0) {
             ImGui::Text("No projects found");
         } else {
-            // TODO: Add project names to list
+            // List all the projects, when selection change show the name and the creation time in a label.
+            // Use a button to open the project
+            ImGui::Text("Projects");
+            if (gui_project_open_popup_project_name != "") {
+                ImGui::Text("Selected: %s", gui_project_open_popup_project_name.c_str());
+                std::time_t today_time = std::chrono::system_clock::to_time_t(GetProjectManager()->GetProjects()[gui_project_open_popup_project_name].GetCreationTime());
+                ImGui::Text("Created: %s", std::ctime(&today_time));
+            }
+            ImGui::Separator();
+            for (auto& project : GetProjectManager()->GetProjects()) {
+                if (ImGui::Selectable(project.first.c_str())) {
+                    gui_project_open_popup_project_name = project.first;
+                }
+            }
+            ImGui::Separator();
+            if (gui_project_open_popup_project_name != "") {
+                if (ImGui::Button("Open")) {
+                    if (!GetProjectManager()->GetProjects()[gui_project_open_popup_project_name].Validate()) {
+                        std::cout << "Project is not valid" << std::endl;
+                    } else {
+                        GetProjectManager()->SetCurrentProject(gui_project_open_popup_project_name);
+                        gui_project_open_popup_project_name = "";
+                        gui_project_open_popup_open = false;
+                    }                
+                }
+            }
         }
     ImGui::End();
 }

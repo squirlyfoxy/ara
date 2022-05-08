@@ -6,6 +6,8 @@
 namespace ara {
 
     const char* GetFileContent(const std::string& filePath) {
+        // TODO: IF WEB, WE NEED TO USE A WEB API TO GET THE FILE CONTENT
+        
         FILE* file = fopen(filePath.c_str(), "r");
         if (file == nullptr) {
             std::cout << "Failed to open file: " << filePath << std::endl;

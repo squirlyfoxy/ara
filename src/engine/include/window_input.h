@@ -29,4 +29,4 @@ namespace ara {
         static void MousePositionCallback(GLFWwindow* window, double xpos, double ypos);
 
     };
-} // namespace ara
+} // ara

@@ -17,10 +17,13 @@ file(GLOB_RECURSE SRCS
     src/*/*/*/*.cpp
     lib/imgui/*.cpp
     lib/imgui/backends/*.cpp
+
+    lib/imgui/misc/cpp/*.cpp
 )
 
 # imgui library include
 include_directories(lib/imgui)
+include_directories(lib/imgui/misc/cpp)
 
 add_executable(gui main.cpp ${SRCS})
 target_link_libraries(gui engine glad SQLiteCpp)

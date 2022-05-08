@@ -1,5 +1,7 @@
 #include "gui_menu.h"
 
+#include "imgui_stdlib.h"
+
 #include "project_manager.h"
 #include "version.hpp"
 
@@ -11,6 +13,7 @@ bool gui_help_about_open = false;
 bool gui_new_project_open = false;
 bool gui_project_open_popup_open = false;
 std::string gui_project_open_popup_project_name = "";
+std::string gui_new_project_project_name = "";
 
 void gui_render_help() {
     // No Resize
@@ -23,6 +26,21 @@ void gui_render_help() {
 void gui_new_project() {
     // No Resize
     ImGui::Begin("New Project", &gui_new_project_open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+        ImGui::Text("Create a new project");
+        ImGui::Separator();
+        ImGui::InputText("Project Name", &gui_new_project_project_name);
+        ImGui::Separator();
+        if (ImGui::Button("Create")) {
+            // Create the project
+            if (gui_new_project_project_name != "") {
+                ara::Project project(gui_new_project_project_name);
+                project.SetBasePath("projects/" + gui_new_project_project_name);
+
+                GetProjectManager()->AddProject(project);
+                gui_new_project_project_name = "";
+                gui_new_project_open = false;
+            }
+        }
     ImGui::End();
 }
 

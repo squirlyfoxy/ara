@@ -94,6 +94,10 @@ void ProjectManager::AddProject(ara::Project project) {
     mProjects[project.GetName()] = project;
 }
 
+void ProjectManager::ProjectEditor() {
+    // TODO: Implement project editor
+}
+
 std::map<std::string, ara::Project> ProjectManager::GetProjects() {
     return mProjects;
 }

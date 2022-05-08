@@ -1,5 +1,7 @@
 #include "project.h"
 
+#include <iostream>
+
 #include "version.hpp"
 
 namespace ara {
@@ -29,17 +31,34 @@ namespace ara {
             return false;
         }
 
-        std::string line;
-        std::getline(fs, line);
+        std::string fL;
+        std::string sL;
+        std::string tL;
+
+        std::getline(fs, fL);
+        std::getline(fs, sL);
+        std::getline(fs, tL);
         fs.close();
 
         // The line should be "ARA [version]"
-        if (line.substr(0, 4) != "ARA ") {
+        if (fL.substr(0, 4) != "ARA ") {
+            return false;
+        }
+/*
+        if (sL != std::to_string(mCreationTime.time_since_epoch().count())) {
+            std::cout << "Creation time is not correct" << std::endl;
+            std::cout << "Expected: " << sL << std::endl;
+            std::cout << "Actual: " << mCreationTime.time_since_epoch().count() << std::endl;
+            return false;
+        }
+*/
+        if (tL != mName) {
+            std::cout << "Project name is not correct" << std::endl;
             return false;
         }
 
         // Check the version
-        std::string version = line.substr(4);
+        std::string version = fL.substr(4);
         if (version != std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR)) {
             return false;
         }

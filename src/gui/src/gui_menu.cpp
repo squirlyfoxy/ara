@@ -55,7 +55,7 @@ void gui_open_project() {
             ImGui::Text("Projects");
             if (gui_project_open_popup_project_name != "") {
                 ImGui::Text("Selected: %s", gui_project_open_popup_project_name.c_str());
-                std::time_t today_time = std::chrono::system_clock::to_time_t(GetProjectManager()->GetProjects()[gui_project_open_popup_project_name].GetCreationTime());
+                std::time_t today_time = std::chrono::system_clock::to_time_t(GET_PROJECT(gui_project_open_popup_project_name).GetCreationTime());
                 ImGui::Text("Created: %s", std::ctime(&today_time));
             }
             ImGui::Separator();
@@ -67,7 +67,7 @@ void gui_open_project() {
             ImGui::Separator();
             if (gui_project_open_popup_project_name != "") {
                 if (ImGui::Button("Open")) {
-                    if (!GetProjectManager()->GetProjects()[gui_project_open_popup_project_name].Validate()) {
+                    if (!GET_PROJECT(gui_project_open_popup_project_name).Validate()) {
                         std::cout << "Project is not valid" << std::endl;
                     } else {
                         GetProjectManager()->SetCurrentProject(gui_project_open_popup_project_name);

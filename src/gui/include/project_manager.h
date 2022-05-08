@@ -27,3 +27,5 @@ private:
 };
 
 ProjectManager* GetProjectManager();
+
+#define GET_PROJECT(...) GetProjectManager()->GetProjects()[__VA_ARGS__]

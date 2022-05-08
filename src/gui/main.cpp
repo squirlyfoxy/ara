@@ -9,6 +9,8 @@
 
 #include "project_manager.h"
 
+#include "utils_fluids.h"
+
 #include <iostream>
 
 // ARA includes
@@ -21,6 +23,8 @@ int main() {
     ara::Window window(800, 600, "ARA Window");
 
     //GetProjectManager()->AddProject(ara::Project("test"));
+
+    std::cout << ara::GetFileContent("test.txt") << std::endl;
 
     // Initialize the ImGui context
     IMGUI_CHECKVERSION();

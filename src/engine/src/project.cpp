@@ -105,6 +105,12 @@ namespace ara {
         fs->write(std::to_string(project.mCreationTime.time_since_epoch().count()).c_str(), std::to_string(project.mCreationTime.time_since_epoch().count()).size()); fs->write("\n", 1);
         fs->write(project.mName.c_str(), project.mName.size()); fs->write("\n", 1);
 
+        for (auto& scene : project.gScenes) {
+            fs->write("Scene ", 6);
+            fs->write(scene.GetName().c_str(), scene.GetName().size());
+            fs->write("\n", 1);
+        }
+
         // In a basic project, there isn't any scene
     }
 

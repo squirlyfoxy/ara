@@ -50,8 +50,7 @@ int main() {
     window.SetRenderEnd(
         []() {
             // End imgui frame
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        }
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());        }
     );
 
     window.SetDestroy(

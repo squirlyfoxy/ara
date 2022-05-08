@@ -8,5 +8,11 @@
 #define ARA_API __declspec(dllimport)
 #endif
 #else
+// Linux or MacOS
 #define ARA_API
 #endif
+
+// ******************************
+// Error codes
+
+#define ARA_GLAD_ERROR_EXIT_CODE -1

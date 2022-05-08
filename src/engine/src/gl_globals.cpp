@@ -1,5 +1,7 @@
 #include "gl_globals.h"
 
+#include "commons.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -10,7 +12,7 @@ void InitializeOpenGL() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return;
+        exit(ARA_GLAD_ERROR_EXIT_CODE);
     }
 
     // Print OpenGL version

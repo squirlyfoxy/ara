@@ -14,11 +14,17 @@ namespace ara
         mHeight = height;
         mTitle = title;
 
+        gClearColor = glm::vec3(0.5f, 0.5f, 0.5f); // Gray as default
+
         Init();
+
+        gInputManager = new InputManager(mWindow);
     }
 
     Window::~Window()
     {
+        delete gInputManager;
+
         if (mDestroySet) mDestroy();
 
         glfwDestroyWindow(mWindow);
@@ -32,6 +38,10 @@ namespace ara
 
     void Window::WindowResizeCallback(GLFWwindow* window, int width, int height)
     {
+        Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        w->SetWidth(width);
+        w->SetHeight(height);
+
         glViewport(0, 0, width, height); // Update viewport
     }
 
@@ -45,14 +55,14 @@ namespace ara
         }
         glfwSetErrorCallback(ErrorCallback);
         
-        // Context version 4.6
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        /*// Context version 4.6
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-
+*/
         if (!(mWindow = glfwCreateWindow(mWidth, mHeight, mTitle.c_str(), nullptr, nullptr)))
         {
             std::cout << "Failed to create GLFW window" << std::endl;
@@ -61,6 +71,9 @@ namespace ara
         }
 
         glfwMakeContextCurrent(mWindow);
+
+        // Set pointers to the window
+        glfwSetWindowUserPointer(mWindow, this);
 
         // Set callbacks for window
         glfwSetWindowSizeCallback(mWindow, WindowResizeCallback);
@@ -74,8 +87,8 @@ namespace ara
         {
             if (mRenderStartSet) mRenderStart();
 
-            glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
+            glClearColor(gClearColor.x, gClearColor.y, gClearColor.z, 1.0f);
 
             if (mRenderEndSet) mRenderEnd();
 
@@ -105,6 +118,26 @@ namespace ara
     GLFWwindow* Window::GetWindow() const
     {
         return mWindow;
+    }
+
+    int Window::GetWidth() const
+    {
+        return mWidth;
+    }
+
+    int Window::GetHeight() const
+    {
+        return mHeight;
+    }
+
+    void Window::SetWidth(int width)
+    {
+        mWidth = width;
+    }
+
+    void Window::SetHeight(int height)
+    {
+        mHeight = height;
     }
 
 } // ara

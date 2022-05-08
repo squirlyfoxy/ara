@@ -6,6 +6,9 @@
 #include <functional>
 
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+#include "window_input.h"
 
 namespace ara
 {
@@ -16,14 +19,29 @@ namespace ara
         ~Window();
 
         void Run();
-        // Executes before glClearColor and glClear
+        // Executes before glClear
         void SetRenderStart(std::function<void()> renderU);
-        // Executes after glClearColor and glClear
+        // Executes after glClear
         void SetRenderEnd(std::function<void()> render);
         // Executes if the window is closed
         void SetDestroy(std::function<void()> destroy);
 
+        // Getters
+
         GLFWwindow* GetWindow() const;
+        int GetWidth() const;
+        int GetHeight() const;
+
+        // Setters
+
+        void SetWidth(int width);
+        void SetHeight(int height);
+
+        // Clear color
+        glm::vec3 gClearColor;
+
+        // Input
+        InputManager *gInputManager;
 
     private:
         int mWidth, mHeight;
@@ -32,6 +50,7 @@ namespace ara
         GLFWwindow* mWindow;
 
         // Methods
+
         std::function<void()> mRenderStart;
         std::function<void()> mRenderEnd;
         std::function<void()> mDestroy;

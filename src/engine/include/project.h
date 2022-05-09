@@ -27,21 +27,28 @@ namespace ara {
         const std::string& GetBasePath() const; // Get the base path of the project
         const std::chrono::system_clock::time_point& GetCreationTime() const; // Get the creation time of the project
 
+        Scene GetCurrentScene() const; // Get the current scene of the project
+
         // Setters
 
         void SetName(const std::string& name); // Set the name of the project
         void SetBasePath(const std::string& basePath); // Set the base path of the project
         void SetCreationTime(const std::chrono::system_clock::time_point& creationTime); // Set the creation time of the project
+        void SetCurrentScene(const Scene& scene); // Set the current scene of the project
 
         // All scenes in the project
         std::vector<Scene> gScenes;
 
         static void InitializeBasicProject(std::ofstream *fs, const Project& project);
 
+        static Project ReadProject(const std::string& path);
+
     private:
         std::string mName;
         std::string mBasePath;
         std::chrono::system_clock::time_point mCreationTime;    // When the project was created
+    
+        int mCurrentSceneIndex;
     };
 
 } // ara

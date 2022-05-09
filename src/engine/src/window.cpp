@@ -88,9 +88,10 @@ namespace ara
             if (mRenderStartSet) mRenderStart();
 
             glClear(GL_COLOR_BUFFER_BIT);
-            glClearColor(gClearColor.x, gClearColor.y, gClearColor.z, 1.0f);
 
             if (mRenderEndSet) mRenderEnd();
+
+            glClearColor(gClearColor.x, gClearColor.y, gClearColor.z, 1.0f);
 
             glfwSwapBuffers(mWindow);
             glfwPollEvents();

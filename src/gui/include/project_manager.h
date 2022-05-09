@@ -9,12 +9,15 @@ public:
     ProjectManager();
     ~ProjectManager();
 
+    // Getters
+
     ara::Project* GetCurrentProject();
+
     void SetCurrentProject(std::string projectName);
     void AddProject(ara::Project project);
     int GetProjectCount();
 
-    void ProjectEditor();
+    void RenderProjectEditor();
 
     std::map<std::string, ara::Project> GetProjects();
 

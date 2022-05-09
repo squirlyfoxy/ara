@@ -1,5 +1,7 @@
 #include "project_manager.h"
 
+#include "gui_scene_editor.h"
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -31,12 +33,14 @@ ProjectManager::ProjectManager() {
 
         // Create a new project
         ara::Project project;
-        project.SetName(projectName);
-        project.SetBasePath(projectPath);
-        project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoul(projectCreationTime)));
+        project = ara::Project::ReadProject(projectPath + "/" + projectName + ".ara");
+
+        std::cout << "Project " << project.GetName() << " loaded" << std::endl;
+        std::cout << "Scene count: " << project.gScenes.size() << std::endl;
 
         // Add the project to the map
         mProjects[projectName] = project;
+        mCurrentProject = projectName;
     }
 }
 
@@ -94,8 +98,10 @@ void ProjectManager::AddProject(ara::Project project) {
     mProjects[project.GetName()] = project;
 }
 
-void ProjectManager::ProjectEditor() {
+void ProjectManager::RenderProjectEditor() {
     // TODO: Implement project editor
+
+    gui_render_scene_editor(GetCurrentProject()->GetCurrentScene());
 }
 
 std::map<std::string, ara::Project> ProjectManager::GetProjects() {

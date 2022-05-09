@@ -10,6 +10,7 @@
 #include "gui_menu.h"
 
 #include "project_manager.h"
+#include "gui_scene_editor.h"
 
 #include <iostream>
 
@@ -21,7 +22,8 @@ int main() {
     std::cout << "Starting ARA version: " << ara_VERSION_MAJOR << "." << ara_VERSION_MINOR << "..." << std::endl;
 
     // Create a window
-    ara::Window window(800, 600, "ARA Window");
+    ara::Window window(1024, 768, "ARA");
+    initialize_scene_editor_framebuffer();
 
     // Initialize the ImGui context
     IMGUI_CHECKVERSION();
@@ -72,6 +74,8 @@ int main() {
 
                 gui_render_menu();
 
+                GetProjectManager()->RenderProjectEditor();
+
             ImGui::Render();
         }
     );
@@ -80,16 +84,26 @@ int main() {
         [&]() {
             // End imgui frame
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
+            bind_scene_editor_framebuffer();
+            glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
             shader.Use();
             glBindVertexArray(vao);
             glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            unbind_scene_editor_framebuffer();
+            glViewport(0, 0, window.GetWidth(), window.GetHeight());
         }
     );
 
     window.SetDestroy(
         [&]() {
             // Cleanup code goes here for editor
+            destroy_scene_editor_framebuffer();
+
             ImGui_ImplOpenGL3_Shutdown();
             ImGui_ImplGlfw_Shutdown();
             ImGui::DestroyContext();

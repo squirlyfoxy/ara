@@ -1,17 +1,23 @@
 #include "project.h"
 
+#include "utils_fluids.h"
+
 #include <iostream>
+#include <sstream>
 
 #include "version.hpp"
 
 namespace ara {
 
     Project::Project() {
+        mCurrentSceneIndex = 0;
+
         // DEFAULT CONSTRUCTOR, DO NOT USE
     }
 
     Project::Project(const std::string& name) {
         mName = name;
+        mCurrentSceneIndex = 0;
 
         // Set the creation time
         mCreationTime = std::chrono::system_clock::now();
@@ -78,6 +84,10 @@ namespace ara {
         return mCreationTime;
     }
 
+    Scene Project::GetCurrentScene() const {
+        return gScenes[mCurrentSceneIndex];
+    }
+
     void Project::SetBasePath(const std::string& basePath) {
         mBasePath = basePath;
     }
@@ -88,6 +98,15 @@ namespace ara {
 
     void Project::SetCreationTime(const std::chrono::system_clock::time_point& creationTime) {
         mCreationTime = creationTime;
+    }
+
+    void Project::SetCurrentScene(const Scene& scene) {
+        for (int i = 0; i < gScenes.size(); i++) {
+            if (gScenes[i].GetName() == scene.GetName()) {
+                mCurrentSceneIndex = i;
+                return;
+            }
+        }
     }
 
 
@@ -112,6 +131,56 @@ namespace ara {
         }
 
         // In a basic project, there isn't any scene
+    }
+
+    Project Project::ReadProject(const std::string& path) {
+        Project project;
+
+        // Read the file
+        const char* content = GetFileContent(path);
+
+        // Loop through the file lines
+        std::string line;
+        std::stringstream ss(content);
+        int l_count = 0;
+        while (std::getline(ss, line)) {
+            l_count++;
+
+            // Check if starts with "ARA "
+            if (line.substr(0, 4) == "ARA ") {
+                // Check the version
+                std::string version = line.substr(4);
+                if (version != std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR)) {
+                    std::cout << "Wrong version" << std::endl;
+                    return project;
+                }
+
+                continue;
+            }
+
+            if (l_count == 2) {
+                // Set the creation time
+                //project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoi(line)));
+                continue;
+            }
+
+            if (l_count == 3) {
+                // Set the name
+                project.SetName(line);
+                continue;
+            }
+
+            if (line.substr(0, 6) == "Scene ") {
+                std::cout << "Scene found" << std::endl;
+
+                // Add the scene
+                Scene scene = Scene(line.substr(6));
+                project.gScenes.push_back(scene);
+                continue;
+            }
+        }
+
+        return project;
     }
 
 } // ara

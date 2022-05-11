@@ -81,10 +81,37 @@ namespace ara
         InitializeOpenGL();
     }
 
+    void Window::Update()
+    {
+        // Update input
+        if (gInputManager->CanUpdate())
+        {
+            // Call the mouse button callbacks
+            for (auto& callback : mMouseButtonEvents)
+            {
+                callback(gInputManager);
+            }
+
+            // Call the key callbacks
+            for (auto& callback : mKeyEvents)
+            {
+                callback(gInputManager);
+            }
+        }
+
+        // Call the mouse callbacks
+        for (auto& callback : mMouseEvents)
+        {
+            callback(gInputManager->GetMouseX(), gInputManager->GetMouseY());
+        }
+    }
+
     void Window::Run()
     {
         while (!glfwWindowShouldClose(mWindow))
         {
+            Update();
+
             if (mRenderStartSet) mRenderStart();
 
             glClear(GL_COLOR_BUFFER_BIT);
@@ -114,6 +141,21 @@ namespace ara
     {
         mDestroy = destroy;
         mDestroySet = true;
+    }
+
+    void Window::AddMouseMovedEvent(std::function<void(float, float)> event)
+    {
+        mMouseEvents.push_back(event);
+    }
+
+    void Window::AddMouseButtonEvent(std::function<void(InputManager*)> event)
+    {
+        mMouseButtonEvents.push_back(event);
+    }
+
+    void Window::AddKeyEvent(std::function<void(InputManager*)> event)
+    {
+        mKeyEvents.push_back(event);
     }
 
     GLFWwindow* Window::GetWindow() const

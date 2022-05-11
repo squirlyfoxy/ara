@@ -1,5 +1,7 @@
 #include "gui_scene_editor.h"
 
+#include <glad/glad.h>
+
 #include "imgui.h"
 
 #include <gl_framebuffer.h>
@@ -31,7 +33,6 @@ int GetWindowHeight() {
 }
 
 bool first_frame = true;
-
 void gui_render_scene_editor(ara::Scene s) {
     ImGui::Begin(std::string("Scene Editor - " + s.GetName()).c_str(), nullptr, ImGuiWindowFlags_NoResize);
         // Render the texture
@@ -51,4 +52,12 @@ void gui_render_scene_editor(ara::Scene s) {
             ImVec2(pos.x + 800, pos.y + 600)
         );
     ImGui::End();
+}
+
+void gui_render_scene(ara::Scene s) {
+    bind_scene_editor_framebuffer();
+        glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+    unbind_scene_editor_framebuffer();
 }

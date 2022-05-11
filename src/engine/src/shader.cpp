@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <glad/glad.h>
 
 #include "commons.h"
@@ -47,6 +49,22 @@ namespace ara {
         glUseProgram(0);
     }
 
+    void Shader::SetInt(const std::string& name, int value) {
+        glUniform1i(GetUniformLocation(name), value);
+    }
+
+    void Shader::SetFloat(const std::string& name, float value) {
+        glUniform1f(GetUniformLocation(name), value);
+    }
+
+    void Shader::SetVec3(const std::string& name, const glm::vec3& value) {
+        glUniform3fv(GetUniformLocation(name), 1, &glm::value_ptr(value)[0]);
+    }
+
+    void Shader::SetMat4(const std::string& name, const glm::mat4& value) {
+        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &glm::value_ptr(value)[0]);
+    }
+
     void Shader::Init() {
         unsigned int vertexShader;
         unsigned int fragmentShader;
@@ -83,7 +101,7 @@ namespace ara {
         return id;
     }
 
-    unsigned int Shader::GetUniformLocation(const std::string& name) {
+    int Shader::GetUniformLocation(const std::string& name) {
         if (uniform_locations.find(name) != uniform_locations.end()) {
             return uniform_locations[name];
         }

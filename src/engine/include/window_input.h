@@ -20,6 +20,8 @@ namespace ara {
         static double GetMouseX();
         static double GetMouseY();
 
+        bool CanUpdate();
+
     private:
         // Keyboard callback
         static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

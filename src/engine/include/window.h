@@ -3,6 +3,7 @@
 #include "commons.h"
 
 #include <string>
+#include <vector>
 #include <functional>
 
 #include <GLFW/glfw3.h>
@@ -25,6 +26,12 @@ namespace ara
         void SetRenderEnd(std::function<void()> render);
         // Executes if the window is closed
         void SetDestroy(std::function<void()> destroy);
+
+        // Set events
+
+        void AddMouseMovedEvent(std::function<void(float, float)> event);
+        void AddMouseButtonEvent(std::function<void(InputManager*)> event);
+        void AddKeyEvent(std::function<void(InputManager*)> event);
 
         // Getters
 
@@ -51,6 +58,8 @@ namespace ara
 
         // Methods
 
+        void Update();
+
         std::function<void()> mRenderStart;
         std::function<void()> mRenderEnd;
         std::function<void()> mDestroy;
@@ -58,11 +67,22 @@ namespace ara
         bool mRenderEndSet = false;
         bool mDestroySet = false;
 
+        // Events
+
+        // Mouse moved: (x, y)
+        std::vector<std::function<void(float, float)>> mMouseEvents;
+        // Mouse button pressed
+        std::vector<std::function<void(InputManager*)>> mMouseButtonEvents;
+        // Key pressed
+        std::vector<std::function<void(InputManager*)>> mKeyEvents;
+
         // Initialize glfw
         void Init();
+
+        // Callbacks
+
         // Glfw error callback
         static void ErrorCallback(int error, const char* description);
         // Glfw window resize callback
-        static void WindowResizeCallback(GLFWwindow* window, int width, int height);
-    };
+        static void WindowResizeCallback(GLFWwindow* window, int width, int height);    };
 } // ara

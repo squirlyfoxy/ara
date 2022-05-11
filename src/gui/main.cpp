@@ -6,6 +6,9 @@
 
 #include <glad/glad.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 // GUI
 #include "gui_menu.h"
 
@@ -30,40 +33,15 @@ int main() {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
+    // Move only when using the title bar
+    io.ConfigWindowsMoveFromTitleBarOnly = true;
+
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window.GetWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 430 core");
-
-    float vertices[] = {
-        // first triangle
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f,  0.5f, 0.0f,  // top left 
-        // second triangle
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left
-    };
-
-    unsigned int vao;
-    unsigned int vbo;
-
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-
-    glBindVertexArray(vao);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // Create a shader
-    ara::Shader shader("shaders/base.vert", "shaders/base.frag");
 
     window.SetRenderStart(
         [&]() {
@@ -85,16 +63,8 @@ int main() {
             // End imgui frame
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
-            bind_scene_editor_framebuffer();
-            glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            shader.Use();
-            glBindVertexArray(vao);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-
-            unbind_scene_editor_framebuffer();
+            // Render code goes here for editor
+            gui_render_scene(GetProjectManager()->GetCurrentProject()->GetCurrentScene());
             glViewport(0, 0, window.GetWidth(), window.GetHeight());
         }
     );

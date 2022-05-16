@@ -4,5 +4,6 @@ bin/libengine.so
 bin/libglad.so
 bin/imgui.ini
 bin/projects/*/*.ara
+bin/projects/*/*/*.sara
 
 src/include/version.hpp

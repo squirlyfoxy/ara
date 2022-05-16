@@ -15,7 +15,9 @@ namespace ara {
         ~Entity();
 
         // Methods
-        // TODO
+
+        // Called every frame when needed, the child entities of this class need to implement this method
+        virtual void Render() = 0;
 
         // Getters
         const std::string& GetName() const;
@@ -31,6 +33,10 @@ namespace ara {
 
         std::string mName;
         glm::vec2 mPosition;
+
+        // Methods
+
+        void Update();
     };
 
 }; // ara

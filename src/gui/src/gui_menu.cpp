@@ -34,7 +34,7 @@ void gui_new_project() {
             // Create the project
             if (gui_new_project_project_name != "") {
                 ara::Project project(gui_new_project_project_name);
-                project.SetBasePath("projects/" + gui_new_project_project_name);
+                //project.SetBasePath("projects/" + gui_new_project_project_name);
 
                 GetProjectManager()->AddProject(project);
                 gui_new_project_project_name = "";

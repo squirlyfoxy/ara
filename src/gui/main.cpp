@@ -64,7 +64,10 @@ int main() {
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
             // Render code goes here for editor
-            gui_render_scene(GetProjectManager()->GetCurrentProject()->GetCurrentScene());
+            if (GetProjectManager()->GetCurrentProject() != nullptr) {
+                gui_render_scene(GetProjectManager()->GetCurrentProject()->GetCurrentScene());
+            }
+
             glViewport(0, 0, window.GetWidth(), window.GetHeight());
         }
     );

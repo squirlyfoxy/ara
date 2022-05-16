@@ -18,12 +18,12 @@ namespace ara
 
         Init();
 
-        gInputManager = new InputManager(mWindow);
+        mInputManager = new InputManager(mWindow);
     }
 
     Window::~Window()
     {
-        delete gInputManager;
+        delete mInputManager;
 
         if (mDestroySet) mDestroy();
 
@@ -84,25 +84,25 @@ namespace ara
     void Window::Update()
     {
         // Update input
-        if (gInputManager->CanUpdate())
+        if (mInputManager->CanUpdate())
         {
             // Call the mouse button callbacks
             for (auto& callback : mMouseButtonEvents)
             {
-                callback(gInputManager);
+                callback(mInputManager);
             }
 
             // Call the key callbacks
             for (auto& callback : mKeyEvents)
             {
-                callback(gInputManager);
+                callback(mInputManager);
             }
         }
 
         // Call the mouse callbacks
         for (auto& callback : mMouseEvents)
         {
-            callback(gInputManager->GetMouseX(), gInputManager->GetMouseY());
+            callback(mInputManager->GetMouseX(), mInputManager->GetMouseY());
         }
     }
 

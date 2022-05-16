@@ -4,8 +4,11 @@
 
 #include <iostream>
 #include <sstream>
+#include <filesystem>
 
 #include "version.hpp"
+
+namespace fs = std::filesystem;
 
 namespace ara {
 
@@ -32,8 +35,9 @@ namespace ara {
     bool Project::Validate() {
         // Read the first line from the file, and check if the version is correct
         std::ifstream fs;
-        fs.open(mBasePath + "/" + mName + ".ara");
+        fs.open("./projects/" + mName  + "/" + mName + ".ara");
         if (!fs.is_open()) {
+            std::cout << "Project file not found" << std::endl;
             return false;
         }
 
@@ -48,6 +52,7 @@ namespace ara {
 
         // The line should be "ARA [version]"
         if (fL.substr(0, 4) != "ARA ") {
+            std::cout << "Invalid file format" << std::endl;
             return false;
         }
 /*
@@ -66,6 +71,7 @@ namespace ara {
         // Check the version
         std::string version = fL.substr(4);
         if (version != std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR)) {
+            std::cout << "Version is not correct" << std::endl;
             return false;
         }
 
@@ -76,20 +82,12 @@ namespace ara {
         return mName;
     }
 
-    const std::string& Project::GetBasePath() const {
-        return mBasePath;
-    }
-
     const std::chrono::system_clock::time_point& Project::GetCreationTime() const {
         return mCreationTime;
     }
 
     Scene Project::GetCurrentScene() const {
         return gScenes[mCurrentSceneIndex];
-    }
-
-    void Project::SetBasePath(const std::string& basePath) {
-        mBasePath = basePath;
     }
 
     void Project::SetName(const std::string& name) {
@@ -125,12 +123,18 @@ namespace ara {
         fs->write(project.mName.c_str(), project.mName.size()); fs->write("\n", 1);
 
         for (auto& scene : project.gScenes) {
+            // Create folder for the scene
+            if (!fs::exists("./projects/" + project.mName + "/" + scene.GetName())) {
+                fs::create_directory("./projects/" + project.mName + "/" + scene.GetName());
+
+                // Save the scene
+                ara::Scene::Save("./projects/" + project.mName + "/" + scene.GetName(), scene);
+            }
+
             fs->write("Scene ", 6);
             fs->write(scene.GetName().c_str(), scene.GetName().size());
             fs->write("\n", 1);
         }
-
-        // In a basic project, there isn't any scene
     }
 
     Project Project::ReadProject(const std::string& path) {

@@ -40,7 +40,7 @@ ProjectManager::ProjectManager() {
 
         // Add the project to the map
         mProjects[projectName] = project;
-        mCurrentProject = projectName;
+        //mCurrentProject = projectName;
     }
 }
 
@@ -48,6 +48,10 @@ ProjectManager::~ProjectManager() {
 }
 
 ara::Project* ProjectManager::GetCurrentProject() {
+    if (mCurrentProject.empty()) {
+        return nullptr;
+    }
+
     return &mProjects[mCurrentProject];
 }
 
@@ -99,6 +103,10 @@ void ProjectManager::AddProject(ara::Project project) {
 }
 
 void ProjectManager::RenderProjectEditor() {
+    if (GetCurrentProject() == nullptr) {
+        return;
+    }
+
     // TODO: Implement project editor
 
     gui_render_scene_editor(GetCurrentProject()->GetCurrentScene());

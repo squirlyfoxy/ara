@@ -23,6 +23,9 @@ namespace ara {
         // Getters
 
         const std::string& GetName() const; // Get the name of the scene
+        std::vector<Entity*> GetEntities() const; // Get the entities of the scene
+
+        static void Save(const std::string scene_path, const Scene& scene); // Save the scene to a file
 
     private:
         std::string mName;
@@ -31,7 +34,7 @@ namespace ara {
 
         void Update(); // Will update the physics
 
-        std::vector<Entity> mEntities;
+        std::vector<Entity*> mEntities;
     };
 
 } // ara

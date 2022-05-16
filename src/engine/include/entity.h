@@ -23,20 +23,25 @@ namespace ara {
         const std::string& GetName() const;
         const glm::vec2& GetPosition() const;
         const unsigned int GetUid() const;
+        const std::string& GetType() const;
 
         // Setters
         void SetName(const std::string& name);
         void SetPosition(const glm::vec2& position);
 
-    private:
-        unsigned int mUid;
-
+    protected:
         std::string mName;
         glm::vec2 mPosition;
 
         // Methods
 
         void Update();
+
+        std::string mType;
+
+    private:
+        unsigned int mUid;
     };
+
 
 }; // ara

@@ -25,7 +25,11 @@ namespace ara {
         const std::string& GetName() const; // Get the name of the scene
         std::vector<Entity*> GetEntities() const; // Get the entities of the scene
 
+        // Add an entity to the scene
+        void AddEntity(Entity* entity);
+
         static void Save(const std::string scene_path, const Scene& scene); // Save the scene to a file
+        static void Load(const std::string scene_path, Scene& scene); // Load the scene from a file
 
     private:
         std::string mName;

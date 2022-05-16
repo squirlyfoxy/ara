@@ -1,5 +1,7 @@
 #include "entity.h"
 
+
+
 namespace ara {
 
     Entity::Entity() {
@@ -34,6 +36,10 @@ namespace ara {
 
     const unsigned int Entity::GetUid() const {
         return mUid;
+    }
+
+    const std::string& Entity::GetType() const {
+        return mType;
     }
 
 } // ara

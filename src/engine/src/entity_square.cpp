@@ -20,6 +20,7 @@ namespace ara {
     };
     
     EntitySquare::EntitySquare() {
+        mType = "EntitySquare";
     }
     
     void EntitySquare::Render() {

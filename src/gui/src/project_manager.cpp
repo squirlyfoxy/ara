@@ -35,9 +35,6 @@ ProjectManager::ProjectManager() {
         ara::Project project;
         project = ara::Project::ReadProject(projectPath + "/" + projectName + ".ara");
 
-        std::cout << "Project " << project.GetName() << " loaded" << std::endl;
-        std::cout << "Scene count: " << project.gScenes.size() << std::endl;
-
         // Add the project to the map
         mProjects[projectName] = project;
         //mCurrentProject = projectName;

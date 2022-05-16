@@ -8,6 +8,8 @@
 
 #include "version.hpp"
 
+#include "entity_camera.h"
+
 namespace fs = std::filesystem;
 
 namespace ara {
@@ -26,7 +28,11 @@ namespace ara {
         mCreationTime = std::chrono::system_clock::now();
 
         // Create a default scene
-        gScenes.push_back(Scene("Default"));
+        EntityCamera* camera = new EntityCamera();
+
+        Scene def = Scene("Default");
+        def.AddEntity(camera);
+        gScenes.push_back(def);
     }
 
     Project::~Project() {
@@ -175,10 +181,12 @@ namespace ara {
             }
 
             if (line.substr(0, 6) == "Scene ") {
-                std::cout << "Scene found" << std::endl;
-
                 // Add the scene
                 Scene scene = Scene(line.substr(6));
+
+                // Read the scene
+                ara::Scene::Load("./projects/" + project.mName + "/" + scene.GetName(), scene);
+
                 project.gScenes.push_back(scene);
                 continue;
             }

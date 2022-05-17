@@ -1,9 +1,13 @@
 #include "scene.h"
 
+#include "utils_fluids.h"
+
 #include "entity_camera.h"
 #include "entity_square.h"
 
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
 namespace ara {
 
@@ -73,7 +77,7 @@ namespace ara {
     }
     
     void Scene::Load(const std::string scene_path, Scene& scene) {
-        std::ifstream scene_file(scene_path + "/" + scene.GetName() + ".sara");
+        std::istringstream scene_file(GetFileContent(scene_path + "/" + scene.GetName() + ".sara"));
             // First line the name, the following the name of the entities
             std::string line;
             std::getline(scene_file, line);
@@ -81,8 +85,8 @@ namespace ara {
             scene.mName = line;
 
             while (std::getline(scene_file, line)) {
-                // Create a file for the entity (.ent)
-                std::ifstream entity_file(scene_path + "/" + line + ".ent");
+                // Create a file for the entity (.ent)t
+                std::istringstream entity_file(GetFileContent(scene_path + "/" + line + ".ent"));
                     // First line the type and name, the following the position of the entity
                     std::string entity_line;
                     std::getline(entity_file, entity_line);
@@ -93,6 +97,8 @@ namespace ara {
 
                     std::getline(entity_file, entity_line);
                     std::string position = entity_line;
+
+                    std::cout << "type: " << type << " name: " << name << " position: " << position << std::endl;
 
                     // Create the entity
                     // TODO: MOVE THIS TO A FUNCTION
@@ -108,12 +114,11 @@ namespace ara {
                     // Set the position
                     entity->SetPosition(glm::vec2(std::stof(position.substr(0, position.find(" "))), std::stof(position.substr(position.find(" ") + 1))));
 
+                    // TODO: ENTITY RELATED DESERIALIZATION
+
                     // Add the entity to the scene
                     scene.AddEntity(entity);
-                entity_file.close();
             }
-
-        scene_file.close();
     }
 
 } // ara

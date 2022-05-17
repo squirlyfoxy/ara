@@ -115,7 +115,7 @@ namespace ara {
 
 
 
-    void Project::InitializeBasicProject(std::ofstream *fs, const Project& project) {
+    void Project::Save(std::ofstream *fs, const Project& project) {
         // STRUCTURE FO THE FILE
         //
 

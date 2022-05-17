@@ -75,7 +75,7 @@ void ProjectManager::CreateProjectEnviroment(ara::Project project) {
 
     // Create the project file
     std::ofstream projectFile(path + "/" + project.GetName() + ".ara");
-        ara::Project::InitializeBasicProject(&projectFile, project); // Will initialize the project file
+        ara::Project::Save(&projectFile, project); // Will initialize the project file
     projectFile.close();
 
     // Add the project to the database

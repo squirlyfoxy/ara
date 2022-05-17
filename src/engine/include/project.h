@@ -37,7 +37,7 @@ namespace ara {
         // All scenes in the project
         std::vector<Scene> gScenes;
 
-        static void InitializeBasicProject(std::ofstream *fs, const Project& project);
+        static void Save(std::ofstream *fs, const Project& project);
 
         static Project ReadProject(const std::string& path);
 

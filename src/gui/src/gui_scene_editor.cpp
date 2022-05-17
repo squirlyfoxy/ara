@@ -35,15 +35,18 @@ int GetWindowHeight() {
 }
 
 bool first_frame = true;
+std::string old_scene_name = "";
+
 void gui_render_scene_editor(ara::Scene s) {
     ImGui::Begin(std::string("Scene Editor - " + s.GetName()).c_str(), nullptr, ImGuiWindowFlags_NoResize);
         // Render the texture
         
-        if (first_frame) {
+        if (first_frame || old_scene_name != s.GetName()) {
             ImGui::SetWindowPos(ImVec2(1, 20));
             ImGui::SetWindowSize(ImVec2(GetWindowWidth(), GetWindowHeight()));
         
             first_frame = false;
+            old_scene_name = s.GetName();
         }
 
         ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -56,7 +59,7 @@ void gui_render_scene_editor(ara::Scene s) {
     ImGui::End();
 
     // List of the scenes in the project
-    ImGui::Begin("Scenes", nullptr, ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Scenes", nullptr);
         for (auto& scene : GetProjectManager()->GetCurrentProject()->gScenes) {
             if (ImGui::Button(scene.GetName().c_str())) {
                 GetProjectManager()->GetCurrentProject()->SetCurrentScene(scene);
@@ -69,12 +72,24 @@ void gui_render_scene_editor(ara::Scene s) {
         if (GetProjectManager()->GetCurrentProject()->GetCurrentScene().GetEntities().size() == 0) {
             ImGui::Text("No entities in this scene");
         } else {
-            for (auto& entity : GetProjectManager()->GetCurrentProject()->GetCurrentScene().GetEntities()) {
-                // Selectable
-                if (ImGui::Selectable(entity->GetName().c_str())) {
-                    // TODO: Select the entity
+            // List the entity in a tree
+            ImGui::BeginChild("Entities", ImVec2(0, 0), true);
+                for (auto& entity : GetProjectManager()->GetCurrentProject()->GetCurrentScene().GetEntities()) {
+                    if (ImGui::TreeNode(entity->GetName().c_str())) {
+                        // Buttons in a row (Edit and Delete)
+
+                        if (ImGui::Button("Edit")) {
+                            // TODO: Edit the entity
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::Button("Delete")) {
+                            // TODO: Delete the entity
+                        }
+
+                        ImGui::TreePop();
+                    }
                 }
-            }
+            ImGui::EndChild();
         }
     ImGui::End();
 }

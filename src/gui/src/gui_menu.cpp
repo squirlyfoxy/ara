@@ -2,26 +2,23 @@
 
 #include "imgui_stdlib.h"
 
+#include "gui/gui.h"
+
 #include "project_manager.h"
 #include "version.hpp"
 
 #include <iostream>
+#include <filesystem>
+#include <fstream>
 
 #include "imgui.h"
 
-bool gui_help_about_open = false;
 bool gui_new_project_open = false;
 bool gui_project_open_popup_open = false;
+bool gui_scene_new_popup_open = false;
 std::string gui_project_open_popup_project_name = "";
 std::string gui_new_project_project_name = "";
-
-void gui_render_help() {
-    // No Resize
-    ImGui::Begin("About", &gui_help_about_open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-        ImGui::Text("ARA is a simple 2D Game Engine");
-        ImGui::Text("Version: %d.%d", ara_VERSION_MAJOR, ara_VERSION_MINOR);
-    ImGui::End();
-}
+std::string gui_scene_new_popup_scene_name = "";
 
 void gui_new_project() {
     // No Resize
@@ -80,6 +77,37 @@ void gui_open_project() {
     ImGui::End();
 }
 
+void gui_new_scene() {
+    ImGui::Begin("New Scene", &gui_scene_new_popup_open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+        ImGui::Text("Create a new scene");
+        ImGui::Separator();
+        ImGui::InputText("Scene Name", &gui_scene_new_popup_scene_name);
+        ImGui::Separator();
+        if (ImGui::Button("Create")) {
+            // Create the scene
+            if (gui_scene_new_popup_scene_name != "") {
+                ara::Scene scene(gui_scene_new_popup_scene_name);
+
+                // Create scene folder
+                std::string scene_folder = "projects/" + GetProjectManager()->GetCurrentProject()->GetName() + "/" + gui_scene_new_popup_scene_name;
+                std::filesystem::create_directory(scene_folder);
+
+                GetProjectManager()->GetCurrentProject()->gScenes.push_back(scene);
+
+                ara::Scene::Save(scene_folder, scene);
+
+                // Save the project
+                std::ofstream project_file = std::ofstream("projects/" +  GetProjectManager()->GetCurrentProject()->GetName() + "/" + GetProjectManager()->GetCurrentProject()->GetName() + ".ara");
+                    ara::Project::Save(&project_file, *GetProjectManager()->GetCurrentProject());
+                project_file.close();
+
+                gui_scene_new_popup_scene_name = "";
+                gui_scene_new_popup_open = false;
+            }
+        }
+    ImGui::End();
+}
+
 void gui_render_menu() {
     // Main menu
     if (ImGui::BeginMainMenuBar()) {
@@ -91,16 +119,28 @@ void gui_render_menu() {
             if (ImGui::MenuItem("Exit")) { exit(0); }
             ImGui::EndMenu();
         }
+        if (ImGui::BeginMenu("Project")) {
+            // Submenu for scenes
+            if (ImGui::BeginMenu("Scenes")) {
+                if (ImGui::MenuItem("New Scene")) { if (GetProjectManager()->GetCurrentProject() != nullptr) { gui_scene_new_popup_open = true; } }
+                ImGui::EndMenu();
+            }
+
+            // TODO: SUBMENU FOR ASSETS
+
+            // TODO: SUBMENU FOR ENTITIES
+
+            // TODO: PROJECT OPTIONS
+
+            ImGui::EndMenu();
+        }
         if (ImGui::BeginMenu("Help")) {
-            if (ImGui::MenuItem("About")) { gui_help_about_open = true; }
+            if (ImGui::MenuItem("About")) { 
+                ara::gui::SimpleMessageBox("About", "Ara 2D Game Engine\n\nVersion: " + std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR)  + "\nCreated by: @sqirlyfoxy\n\nCopyright (c) 2022 7Software. All rights reserved.");
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
-    }
-
-    // Help window
-    if (gui_help_about_open) {
-        gui_render_help();
     }
 
     // New project window
@@ -111,5 +151,10 @@ void gui_render_menu() {
     // Project open list
     if (gui_project_open_popup_open) {
         gui_open_project();
+    }
+
+    // New scene
+    if (gui_scene_new_popup_open) {
+        gui_new_scene();
     }
 }

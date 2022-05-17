@@ -7,9 +7,15 @@
 #else
 #define ARA_API __declspec(dllimport)
 #endif
+
+#define ARA_INCLUDE_OS #include <windows.h>
+
 #else
 // Linux or MacOS
 #define ARA_API
+
+#define ARA_INCLUDE_OS
+
 #endif
 
 // ******************************

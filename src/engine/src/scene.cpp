@@ -71,6 +71,8 @@ namespace ara {
                     // Write the entity position (in one line, x and y separated by a space)
                     entity_file.write((std::to_string(entity->GetPosition().x) + " " + std::to_string(entity->GetPosition().y) + "\n").c_str(), (std::to_string(entity->GetPosition().x) + " " + std::to_string(entity->GetPosition().y) + "\n").size());
 
+                    // TODO: ENTITY DATA
+
                 entity_file.close();
             }
         scene_file.close();

@@ -12,6 +12,8 @@ namespace ara {
 
         virtual void Render();
     private:
+
+        void Init();
     };
 
 } // ara

@@ -124,6 +124,8 @@ namespace ara {
         // [name]
         // Scene [name] ....
 
+        std::cout << "Saving " << project.GetName() << std::endl;
+
         fs->write(std::string("ARA " + std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR) + "\n").c_str(), std::string("ARA " + std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR) + "\n").size());
         fs->write(std::to_string(project.mCreationTime.time_since_epoch().count()).c_str(), std::to_string(project.mCreationTime.time_since_epoch().count()).size()); fs->write("\n", 1);
         fs->write(project.mName.c_str(), project.mName.size()); fs->write("\n", 1);
@@ -132,10 +134,12 @@ namespace ara {
             // Create folder for the scene
             if (!fs::exists("./projects/" + project.mName + "/" + scene.GetName())) {
                 fs::create_directory("./projects/" + project.mName + "/" + scene.GetName());
-
-                // Save the scene
-                ara::Scene::Save("./projects/" + project.mName + "/" + scene.GetName(), scene);
             }
+
+            std::cout << "-> Saving scene: " << scene.GetName() << std::endl;
+
+            // Save the scene
+            ara::Scene::Save("./projects/" + project.mName + "/" + scene.GetName(), scene);
 
             fs->write("Scene ", 6);
             fs->write(scene.GetName().c_str(), scene.GetName().size());
@@ -170,7 +174,7 @@ namespace ara {
 
             if (l_count == 2) {
                 // Set the creation time
-                //project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoi(line)));
+                project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoi(line)));
                 continue;
             }
 

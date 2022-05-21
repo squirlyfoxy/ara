@@ -20,6 +20,8 @@ std::string gui_project_open_popup_project_name = "";
 std::string gui_new_project_project_name = "";
 std::string gui_scene_new_popup_scene_name = "";
 
+void save();
+
 void gui_new_project() {
     // No Resize
     ImGui::Begin("New Project", &gui_new_project_open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
@@ -65,7 +67,7 @@ void gui_open_project() {
             if (gui_project_open_popup_project_name != "") {
                 if (ImGui::Button("Open")) {
                     if (!GET_PROJECT(gui_project_open_popup_project_name).Validate()) {
-                        std::cout << "Project is not valid" << std::endl;
+                        ara::gui::ErrorMessageBox("Error", "Project is corrupted");
                     } else {
                         GetProjectManager()->SetCurrentProject(gui_project_open_popup_project_name);
                         gui_project_open_popup_project_name = "";
@@ -96,10 +98,7 @@ void gui_new_scene() {
 
                 ara::Scene::Save(scene_folder, scene);
 
-                // Save the project
-                std::ofstream project_file = std::ofstream("projects/" +  GetProjectManager()->GetCurrentProject()->GetName() + "/" + GetProjectManager()->GetCurrentProject()->GetName() + ".ara");
-                    ara::Project::Save(&project_file, *GetProjectManager()->GetCurrentProject());
-                project_file.close();
+                save();
 
                 gui_scene_new_popup_scene_name = "";
                 gui_scene_new_popup_open = false;
@@ -108,13 +107,21 @@ void gui_new_scene() {
     ImGui::End();
 }
 
+void save() {
+    if (GetProjectManager()->GetCurrentProject() != nullptr) {
+        std::ofstream project_file = std::ofstream("projects/" +  GetProjectManager()->GetCurrentProject()->GetName() + "/" + GetProjectManager()->GetCurrentProject()->GetName() + ".ara");
+            ara::Project::Save(&project_file, *GetProjectManager()->GetCurrentProject());
+        project_file.close();
+    }
+}
+
 void gui_render_menu() {
     // Main menu
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("New Project")) { gui_new_project_open = true; }
             if (ImGui::MenuItem("Open Project")) { gui_project_open_popup_open = true; }
-            if (ImGui::MenuItem("Save")) { }
+            if (ImGui::MenuItem("Save")) { save(); }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) { exit(0); }
             ImGui::EndMenu();

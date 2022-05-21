@@ -14,6 +14,7 @@ namespace ara {
 
     // Render the camera
     void EntityCamera::Render() {
+        // NOTE: Nothing
     }
 
     const glm::mat4& EntityCamera::GetViewMatrix() const {

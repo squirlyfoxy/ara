@@ -42,34 +42,12 @@ std::string old_scene_name = "";
 
 bool gui_edit_entity_open = false;
 ara::Entity* selected_entity = nullptr;
-std::string selected_entity_name = "";
 void gui_edit_entity() {
     ImGui::Begin("Edit Entity", &gui_edit_entity_open);
         ImGui::Text(("Editing " + selected_entity->GetName()).c_str());
         ImGui::Separator();
 
-        // Position
-        ImGui::Text("Position X | Y");
-        ImGui::SameLine();
-        float poss[] = {selected_entity->GetPosition().x, selected_entity->GetPosition().y};
-        ImGui::InputFloat2("##Position", poss);    
-        selected_entity->SetPosition(glm::vec2(poss[0], poss[1]));
-
-        // Name
-        ImGui::Text("Name");
-        ImGui::SameLine();
-
-        ImGui::InputText("##Name", &selected_entity_name);
-
-        // Save
-        if (ImGui::Button("Save")) {
-            if (!selected_entity_name.empty()) {
-                selected_entity->SetName(selected_entity_name);
-            } else {
-                ara::gui::ErrorMessageBox("Error", "Entity name cannot be empty");
-                selected_entity_name = selected_entity->GetName();
-            }
-        }
+        selected_entity->Edit();
 
     ImGui::End();
 }
@@ -118,7 +96,6 @@ void gui_render_scene_editor(ara::Scene s) {
                         if (ImGui::Button("Edit")) {
                             // Edit the entity
                             gui_edit_entity_open = true;
-                            selected_entity_name = entity->GetName();
                         }
                         ImGui::SameLine();
                         if (ImGui::Button("Delete")) {

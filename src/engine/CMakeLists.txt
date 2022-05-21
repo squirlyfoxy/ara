@@ -8,12 +8,21 @@ include_directories(../include)
 # glm
 include_directories(../lib/glm)
 
+# include imgui
+include_directories(../gui/lib/imgui)
+include_directories(../gui/lib/imgui/misc/cpp)
+
 # source files (all .cpp files in the src directory)
 file(GLOB_RECURSE SRCS 
     src/*.cpp
     src/*/*.cpp
     src/*/*/*.cpp
     src/*/*/*/*.cpp
+
+    ../gui/lib/imgui/imgui/*.cpp
+    ../gui/lib/imgui/imgui/backends/*.cpp
+
+    ../gui/lib/imgui/imgui/misc/cpp/*.cpp
 )
 
 # will build as a dynamic library

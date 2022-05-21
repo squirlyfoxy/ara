@@ -1,6 +1,10 @@
 #include "entity.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#include "imgui.h"
+#include "imgui_stdlib.h"
 
 namespace ara {
 
@@ -40,6 +44,22 @@ namespace ara {
 
     const std::string& Entity::GetType() const {
         return mType;
+    }
+
+    void Entity::BasicEdit() {
+        // Position
+        ImGui::Text("Position");
+        ImGui::SameLine();
+        ImGui::InputFloat2("##Position", glm::value_ptr(mPosition));
+
+        // Name
+        ImGui::Text("Name");
+        ImGui::SameLine();
+        std::string name = mName;
+        ImGui::InputText("##Name", &name);
+        if (!name.empty()) {
+            SetName(name);
+        }
     }
 
 } // ara

@@ -24,5 +24,11 @@ namespace ara {
     const glm::mat4& EntityCamera::GetProjectionMatrix() const {
         return glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
     }
+
+    void EntityCamera::Edit() {
+        BasicEdit();
+
+        // TODO: CAMERA SETTINGS
+    }
     
 } // ara

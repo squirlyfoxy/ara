@@ -52,5 +52,11 @@ namespace ara {
         // Updind VAO
         glBindVertexArray(0);
     }
+
+    void EntitySquare::Edit() {
+        BasicEdit();
+
+        // TODO: SQARE EDIT
+    }
     
 } // ara

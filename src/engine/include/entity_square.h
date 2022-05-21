@@ -11,6 +11,7 @@ namespace ara {
         EntitySquare();
 
         virtual void Render();
+        virtual void Edit();
     private:
 
         void Init();

@@ -6,8 +6,12 @@
 namespace ara {
 
     const char* GetFileContent(const std::string& filePath) {
+    #ifdef ARA_WEB
         // TODO: IF WEB, WE NEED TO USE A WEB API TO GET THE FILE CONTENT
-        
+        // TODO: DESIGN THE WEB REST API USING GOLANG
+
+        return "";
+    #else
         FILE* file = fopen(filePath.c_str(), "r");
         if (file == nullptr) {
             std::cout << "Failed to open file: " << filePath << std::endl;
@@ -26,6 +30,7 @@ namespace ara {
         fclose(file);
 
         return fileContent;
+    #endif
     }
 
 } // namespace ara

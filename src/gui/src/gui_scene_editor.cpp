@@ -1,6 +1,9 @@
 #include "gui_scene_editor.h"
 
 #include "project_manager.h"
+#include "grid.h"
+
+#include "entity_square.h"
 
 #include <glad/glad.h>
 
@@ -13,8 +16,10 @@
 
 ara::Framebuffer* mSceneEditorFramebuffer;
 
-void initialize_scene_editor_framebuffer() {
+void initialize_scene_editor() {
     mSceneEditorFramebuffer = new ara::Framebuffer(800, 600);
+
+    GenerateGridBuffers();
 }
 
 void destroy_scene_editor_framebuffer() {
@@ -117,10 +122,11 @@ void gui_render_scene_editor(ara::Scene s) {
 void gui_render_scene(ara::Scene s) {
     bind_scene_editor_framebuffer();
         glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
-
-        // TODO: Render the scene editor
-
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        
+        // TODO: Render the scene editor
+        DrawGrid();
+
     unbind_scene_editor_framebuffer();
 }

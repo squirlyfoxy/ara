@@ -2,7 +2,7 @@
 
 #include <scene.h>
 
-void initialize_scene_editor_framebuffer();
+void initialize_scene_editor();
 void destroy_scene_editor_framebuffer();
 
 int GetWindowWidth();

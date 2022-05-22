@@ -55,14 +55,14 @@ namespace ara
         }
         glfwSetErrorCallback(ErrorCallback);
         
-        /*// Context version 4.6
+        // Context version 4.6
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-*/
+
         if (!(mWindow = glfwCreateWindow(mWidth, mHeight, mTitle.c_str(), nullptr, nullptr)))
         {
             std::cout << "Failed to create GLFW window" << std::endl;

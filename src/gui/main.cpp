@@ -26,7 +26,7 @@ int main() {
 
     // Create a window
     ara::Window window(1024, 768, "ARA");
-    initialize_scene_editor_framebuffer();
+    initialize_scene_editor();
 
     // Initialize the ImGui context
     IMGUI_CHECKVERSION();

@@ -1,5 +1,6 @@
 #include "grid.h"
 
+#include "utils_transforms.h"
 #include "utils_editor.h"
 #include "gui_scene_editor.h"
 #include "shader.h"
@@ -88,7 +89,8 @@ void DrawGrid() {
     grid_shader->Use();
 
     grid_shader->SetVec3("u_color", glm::vec3(1.0f, 1.0f, 1.0f));
-    grid_shader->SetMat4("proj", GetEditorProjectionMatrix());
+    grid_shader->SetMat4("proj", ara::GetProjection());
+    grid_shader->SetMat4("view", ara::GetView());
 
     // Scale and resolution
     grid_shader->SetFloat("u_scale", gGridScale);

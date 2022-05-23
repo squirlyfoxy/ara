@@ -3,10 +3,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "utils_transforms.h"
 #include "shader.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 namespace ara {
 
@@ -17,10 +17,11 @@ namespace ara {
     static Shader* shader = nullptr;
 
     float vertices[] = {
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
+        // positions          // texture coords
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f
     };
     unsigned int indices[] = {  // note that we start from 0!
         0, 1, 3,   // first triangle
@@ -31,6 +32,8 @@ namespace ara {
         mType = "EntitySquare";
 
         Init();
+
+        gColor = glm::vec3(1.0f, 1.0f, 1.0f);
     }
     
     void EntitySquare::Render() {
@@ -38,12 +41,12 @@ namespace ara {
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(mPosition.x, mPosition.y, 0.0f));
-        
-        /*shader->SetMat4("model", mModel);
-        shader->SetMat4("view", mView);
-        shader->SetMat4("projection", mProjection);*/
 
+        shader->SetMat4("view", GetView());
+        shader->SetMat4("proj", GetProjection());
         shader->SetMat4("model", model);
+
+        shader->SetVec3("u_color", gColor);
 
         glBindVertexArray(sqare_vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -66,8 +69,12 @@ namespace ara {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sqare_ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        // position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+        // texture attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
 
         // Updind VAO
         glBindVertexArray(0);

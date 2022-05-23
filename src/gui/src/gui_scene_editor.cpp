@@ -15,11 +15,14 @@
 #include <gl_framebuffer.h>
 
 ara::Framebuffer* mSceneEditorFramebuffer;
+ara::EntitySquare* mSceneEditorEntity;
 
 void initialize_scene_editor() {
     mSceneEditorFramebuffer = new ara::Framebuffer(800, 600);
 
     GenerateGridBuffers();
+
+    mSceneEditorEntity = new ara::EntitySquare();
 }
 
 void destroy_scene_editor_framebuffer() {
@@ -127,6 +130,8 @@ void gui_render_scene(ara::Scene s) {
         
         // TODO: Render the scene editor
         DrawGrid();
+
+        mSceneEditorEntity->Render();
 
     unbind_scene_editor_framebuffer();
 }

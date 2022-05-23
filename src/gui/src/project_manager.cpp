@@ -1,5 +1,7 @@
 #include "project_manager.h"
 
+#include "utils_editor.h"
+#include "utils_transforms.h"
 #include "gui_scene_editor.h"
 
 #include <filesystem>
@@ -39,6 +41,9 @@ ProjectManager::ProjectManager() {
         mProjects[projectName] = project;
         //mCurrentProject = projectName;
     }
+
+    ara::SetProjectionCallback(std::bind(GetEditorProjectionMatrix));
+    ara::SetViewCallback(std::bind(GetEditorViewMatrix));
 }
 
 ProjectManager::~ProjectManager() {

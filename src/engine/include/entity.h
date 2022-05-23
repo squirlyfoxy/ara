@@ -32,6 +32,8 @@ namespace ara {
         void SetName(const std::string& name);
         void SetPosition(const glm::vec2& position);
 
+        glm::vec3 gColor;
+
     protected:
         std::string mName;
         glm::vec2 mPosition;

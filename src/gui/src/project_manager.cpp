@@ -36,7 +36,7 @@ ProjectManager::ProjectManager() {
         // Create a new project
         ara::Project project;
         project = ara::Project::ReadProject(projectPath + "/" + projectName + ".ara");
-
+        
         // Add the project to the map
         mProjects[projectName] = project;
         //mCurrentProject = projectName;
@@ -111,7 +111,7 @@ void ProjectManager::RenderProjectEditor() {
 
     // TODO: Implement project editor
 
-    gui_render_scene_editor(GetCurrentProject()->GetCurrentScene());
+    gui_render_scene_editor(*GetCurrentProject()->GetCurrentScene());
 }
 
 std::map<std::string, ara::Project> ProjectManager::GetProjects() {

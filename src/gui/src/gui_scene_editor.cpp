@@ -3,8 +3,6 @@
 #include "project_manager.h"
 #include "grid.h"
 
-#include "entity_square.h"
-
 #include <glad/glad.h>
 
 #include "gui/gui.h"
@@ -15,14 +13,11 @@
 #include <gl_framebuffer.h>
 
 ara::Framebuffer* mSceneEditorFramebuffer;
-ara::EntitySquare* mSceneEditorEntity;
 
 void initialize_scene_editor() {
     mSceneEditorFramebuffer = new ara::Framebuffer(800, 600);
 
     GenerateGridBuffers();
-
-    mSceneEditorEntity = new ara::EntitySquare();
 }
 
 void destroy_scene_editor_framebuffer() {
@@ -49,7 +44,7 @@ bool first_frame = true;
 std::string old_scene_name = "";
 
 bool gui_edit_entity_open = false;
-ara::Entity* selected_entity = nullptr;
+ara::Entity* selected_entity;
 void gui_edit_entity() {
     ImGui::Begin("Edit Entity", &gui_edit_entity_open);
         ImGui::Text(("Editing " + selected_entity->GetName()).c_str());
@@ -92,13 +87,14 @@ void gui_render_scene_editor(ara::Scene s) {
 
     // List of the entities in the scene
     ImGui::Begin("Entities");
-        if (GetProjectManager()->GetCurrentProject()->GetCurrentScene().GetEntities().size() == 0) {
+        if (GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities().size() == 0) {
             ImGui::Text("No entities in this scene");
         } else {
             // List the entity in a tree
             ImGui::BeginChild("Entities", ImVec2(0, 0), true);
-                for (auto& entity : GetProjectManager()->GetCurrentProject()->GetCurrentScene().GetEntities()) {
-                    if (ImGui::TreeNode(entity->GetName().c_str())) {
+            std::vector<ara::Entity*> entities = GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities();
+                for (int i = 0; i < entities.size(); i++) {
+                    if (ImGui::TreeNode(entities[i]->GetName().c_str())) {
                         // Buttons in a row (Edit and Delete)
 
                         if (ImGui::Button("Edit")) {
@@ -110,7 +106,7 @@ void gui_render_scene_editor(ara::Scene s) {
                             // TODO: Delete the entity
                         }
 
-                        selected_entity = entity;
+                        selected_entity = entities[i];
 
                         ImGui::TreePop();
                     }
@@ -131,7 +127,8 @@ void gui_render_scene(ara::Scene s) {
         // TODO: Render the scene editor
         DrawGrid();
 
-        mSceneEditorEntity->Render();
+        // Render the scene
+        s.Render(false);
 
     unbind_scene_editor_framebuffer();
 }

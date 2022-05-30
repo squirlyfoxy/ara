@@ -4,12 +4,18 @@
 
 #include "gui/gui.h"
 
+// Entities
+#include "entity_empty.h"
+#include "entity_square.h"
+#include "entity_camera.h"
+
 #include "project_manager.h"
 #include "version.hpp"
 
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <memory>
 
 #include "imgui.h"
 
@@ -132,10 +138,24 @@ void gui_render_menu() {
                 if (ImGui::MenuItem("New Scene")) { if (GetProjectManager()->GetCurrentProject() != nullptr) { gui_scene_new_popup_open = true; } }
                 ImGui::EndMenu();
             }
+            ImGui::Separator();
 
             // TODO: SUBMENU FOR ASSETS
 
             // TODO: SUBMENU FOR ENTITIES
+            if (ImGui::BeginMenu("New")) {
+                if (ImGui::MenuItem("Empty Entity")) {
+                    if (GetProjectManager()->GetCurrentProject() != nullptr) { GetProjectManager()->GetCurrentProject()->GetCurrentScene()->AddEntity(dynamic_cast<ara::Entity*>(new ara::EntityEmpty())); }
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Camera")) {
+                    if (GetProjectManager()->GetCurrentProject() != nullptr) { GetProjectManager()->GetCurrentProject()->GetCurrentScene()->AddEntity(dynamic_cast<ara::Entity*>(new ara::EntityCamera())); }
+                }
+                if (ImGui::MenuItem("Square")) {
+                    if (GetProjectManager()->GetCurrentProject() != nullptr) { GetProjectManager()->GetCurrentProject()->GetCurrentScene()->AddEntity(dynamic_cast<ara::Entity*>(new ara::EntitySquare())); }
+                }
+                ImGui::EndMenu();
+            }
 
             // TODO: PROJECT OPTIONS
 

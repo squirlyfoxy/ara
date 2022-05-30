@@ -9,15 +9,12 @@
 namespace ara {
 
     // Orthographic 2D camera
-    class ARA_API EntityCamera : public Entity {
+    class ARA_API EntityEmpty : public Entity {
     public:
-        EntityCamera();
+        EntityEmpty();
 
         virtual void Render();
         virtual void Edit();
-
-        const glm::mat4& GetViewMatrix() const;
-        const glm::mat4& GetProjectionMatrix() const;
 
     private:
     

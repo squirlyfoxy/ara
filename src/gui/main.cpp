@@ -65,7 +65,7 @@ int main() {
         
             // Render code goes here for editor
             if (GetProjectManager()->GetCurrentProject() != nullptr) {
-                gui_render_scene(GetProjectManager()->GetCurrentProject()->GetCurrentScene());
+                gui_render_scene(*GetProjectManager()->GetCurrentProject()->GetCurrentScene());
             }
 
             glViewport(0, 0, window.GetWidth(), window.GetHeight());

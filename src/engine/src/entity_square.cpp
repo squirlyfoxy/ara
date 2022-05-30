@@ -30,6 +30,7 @@ namespace ara {
 
     EntitySquare::EntitySquare() {
         mType = "EntitySquare";
+        mName = "Square";
 
         Init();
 

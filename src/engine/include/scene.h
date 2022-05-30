@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "entity.h"
 
@@ -18,18 +19,21 @@ namespace ara {
 
         // Methods
 
-        void Render(); // Will render the scene
+        void Render(bool physics = true); // Will render the scene
 
         // Getters
 
         const std::string& GetName() const; // Get the name of the scene
-        std::vector<Entity*> GetEntities() const; // Get the entities of the scene
+        std::vector<Entity*> GetEntities(); // Get all the entities in the scene
 
         // Add an entity to the scene
-        void AddEntity(Entity* entity);
+        void AddEntity(Entity *entity);
 
-        static void Save(const std::string scene_path, const Scene& scene); // Save the scene to a file
+        static void Save(const std::string scene_path, Scene& scene); // Save the scene to a file
         static void Load(const std::string scene_path, Scene& scene); // Load the scene from a file
+
+
+        std::vector<Entity*> gEntities;
 
     private:
         std::string mName;
@@ -38,7 +42,7 @@ namespace ara {
 
         void Update(); // Will update the physics
 
-        std::vector<Entity*> mEntities;
+        
     };
 
 } // ara

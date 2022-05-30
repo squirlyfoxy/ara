@@ -92,8 +92,8 @@ namespace ara {
         return mCreationTime;
     }
 
-    Scene Project::GetCurrentScene() const {
-        return gScenes[mCurrentSceneIndex];
+    Scene* Project::GetCurrentScene() {
+        return &gScenes[mCurrentSceneIndex];
     }
 
     void Project::SetName(const std::string& name) {
@@ -115,7 +115,7 @@ namespace ara {
 
 
 
-    void Project::Save(std::ofstream *fs, const Project& project) {
+    void Project::Save(std::ofstream *fs, Project& project) {
         // STRUCTURE FO THE FILE
         //
 
@@ -130,19 +130,18 @@ namespace ara {
         fs->write(std::to_string(project.mCreationTime.time_since_epoch().count()).c_str(), std::to_string(project.mCreationTime.time_since_epoch().count()).size()); fs->write("\n", 1);
         fs->write(project.mName.c_str(), project.mName.size()); fs->write("\n", 1);
 
-        for (auto& scene : project.gScenes) {
+        for (int i = 0; i < project.gScenes.size(); i++) {
             // Create folder for the scene
-            if (!fs::exists("./projects/" + project.mName + "/" + scene.GetName())) {
-                fs::create_directory("./projects/" + project.mName + "/" + scene.GetName());
+            if (!fs::exists("./projects/" + project.mName + "/" + project.gScenes[i].GetName())) {
+                fs::create_directory("./projects/" + project.mName + "/" + project.gScenes[i].GetName());
             }
 
-            std::cout << "-> Saving scene: " << scene.GetName() << std::endl;
+            std::cout << "-> Saving scene: " << project.gScenes[i].GetName() << std::endl;
 
             // Save the scene
-            ara::Scene::Save("./projects/" + project.mName + "/" + scene.GetName(), scene);
-
+            ara::Scene::Save("./projects/" + project.mName + "/" + project.gScenes[i].GetName(), project.gScenes[i]);
             fs->write("Scene ", 6);
-            fs->write(scene.GetName().c_str(), scene.GetName().size());
+            fs->write(project.gScenes[i].GetName().c_str(), project.gScenes[i].GetName().size());
             fs->write("\n", 1);
         }
     }

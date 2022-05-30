@@ -26,7 +26,7 @@ namespace ara {
         const std::string& GetName() const; // Get the name of the project
         const std::chrono::system_clock::time_point& GetCreationTime() const; // Get the creation time of the project
 
-        Scene GetCurrentScene() const; // Get the current scene of the project
+        Scene* GetCurrentScene(); // Get the current scene of the project
 
         // Setters
 
@@ -37,7 +37,7 @@ namespace ara {
         // All scenes in the project
         std::vector<Scene> gScenes;
 
-        static void Save(std::ofstream *fs, const Project& project);
+        static void Save(std::ofstream *fs, Project& project);
 
         static Project ReadProject(const std::string& path);
 

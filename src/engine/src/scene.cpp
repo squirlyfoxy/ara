@@ -22,10 +22,12 @@ namespace ara {
     Scene::~Scene() {
     }
 
-    void Scene::Render() {
-        Update();
+    void Scene::Render(bool physics) {
+        if (physics) Update();
 
-        // TODO: Render the scene
+        for (auto& entity : GetEntities()) {
+            entity->Render();
+        }
     }
 
     void Scene::Update() {
@@ -36,15 +38,17 @@ namespace ara {
         return mName;
     }
 
-    std::vector<Entity*> Scene::GetEntities() const {
-        return mEntities;
+    std::vector<Entity*> Scene::GetEntities() {
+        return gEntities;
     }
 
-    void Scene::AddEntity(Entity* entity) {
-        mEntities.push_back(entity);
+    void Scene::AddEntity(Entity *entity) {
+        std::cout << "Adding entity to scene" << std::endl;
+        gEntities.push_back(entity);
+        std::cout << gEntities.size() << std::endl;
     }
 
-    void Scene::Save(const std::string scene_path, const Scene& scene) {
+    void Scene::Save(const std::string scene_path, Scene& scene) {
         // Create a [scene_name].sara file in the scene path
         std::ofstream scene_file(scene_path + "/" + scene.GetName() + ".sara", std::ios::trunc);
             // Erase the file
@@ -55,7 +59,7 @@ namespace ara {
             scene_file.write((scene.GetName() + "\n").c_str(), scene.GetName().size() + 1);
 
             // Write the entities
-            for (auto& entity : scene.GetEntities()) {
+            for (auto entity : scene.GetEntities()) {
                 // Write the entity name
                 scene_file.write((entity->GetName() + "\n").c_str(), entity->GetName().size() + 1);
 

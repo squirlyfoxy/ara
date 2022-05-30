@@ -1,12 +1,18 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 
 #include "commons.h"
 
 namespace ara {
+
+    enum class EntityEditModality {
+        Color,
+        Texture
+    };
 
     class ARA_API Entity {
     public:
@@ -37,6 +43,8 @@ namespace ara {
     protected:
         std::string mName;
         glm::vec2 mPosition;
+
+        std::vector<EntityEditModality> mEditModalities;
 
         // Methods
 

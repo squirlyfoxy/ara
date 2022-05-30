@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "commons.h"
 #include "entity.h"
 
@@ -12,6 +14,7 @@ namespace ara {
 
         virtual void Render();
         virtual void Edit();
+
     private:
 
         void Init();

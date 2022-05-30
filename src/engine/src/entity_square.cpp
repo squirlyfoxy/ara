@@ -1,7 +1,10 @@
 #include "entity_square.h"
 
+#include <imgui.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "utils_transforms.h"
 #include "shader.h"
@@ -35,6 +38,7 @@ namespace ara {
         Init();
 
         gColor = glm::vec3(1.0f, 1.0f, 1.0f);
+        mEditModalities.push_back(EntityEditModality::Color);
     }
     
     void EntitySquare::Render() {
@@ -85,6 +89,8 @@ namespace ara {
         BasicEdit();
 
         // TODO: SQARE EDIT
+        
+        ImGui::ColorEdit3("Color", glm::value_ptr(gColor));
     }
     
 } // ara

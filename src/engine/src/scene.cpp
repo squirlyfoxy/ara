@@ -4,6 +4,7 @@
 
 #include "entity_camera.h"
 #include "entity_square.h"
+#include "entity_empty.h"
 
 #include <fstream>
 #include <sstream>
@@ -43,9 +44,7 @@ namespace ara {
     }
 
     void Scene::AddEntity(Entity *entity) {
-        std::cout << "Adding entity to scene" << std::endl;
         gEntities.push_back(entity);
-        std::cout << gEntities.size() << std::endl;
     }
 
     void Scene::Save(const std::string scene_path, Scene& scene) {
@@ -113,6 +112,10 @@ namespace ara {
                         entity = new EntityCamera();
                     } else if (type == "EntitySquare") {
                         entity = new EntitySquare();
+                    } else if (type == "EntityEmpty") {
+                        entity = new EntityEmpty();
+                    } else {
+                        std::cout << "ERROR: Unknown entity type: " << type << std::endl;
                     }
 
                     entity->SetName(name);

@@ -8,13 +8,20 @@
 #include <fstream>
 #include <iostream>
 
+#include <glad/glad.h>
+
 #include <SQLiteCpp/SQLiteCpp.h>
 
 namespace fs = std::filesystem;
 
-ProjectManager mProjectManager;
+ProjectManager* mProjectManager;
 
 ProjectManager::ProjectManager() {
+    // Check if opengl is initialized
+    if (!gladLoadGL()) {
+        std::cout << "Failed to initialize OpenGL context" << std::endl;
+    }
+
     // Connect to editor_db.db3
     SQLite::Database editor_db("editor_db.db3", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 
@@ -119,7 +126,10 @@ std::map<std::string, ara::Project> ProjectManager::GetProjects() {
 }
 
 ProjectManager* GetProjectManager() {
-    // Return the global project manager, pointer
-    return &mProjectManager;
+    if (mProjectManager == nullptr) {
+        mProjectManager = new ProjectManager();
+    }
+
+    return mProjectManager;
 }
 

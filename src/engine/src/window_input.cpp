@@ -1,10 +1,13 @@
 #include "window_input.h"
 
+#include <glm/glm.hpp>
+
 namespace ara {
 
     static bool gKeys[MAX_KEYS];
     static bool gMouseButtons[MAX_BUTTONS];
     static double gMouseX, gMouseY;
+    static double gScrollX, gScrollY;
 
     static bool gCanUpdate = false;
     static int gUpdatesSinceMouse = 0;
@@ -20,6 +23,7 @@ namespace ara {
         glfwSetKeyCallback(window, KeyCallback); // Keyboard
         glfwSetMouseButtonCallback(window, MouseButtonCallback); // Mouse button
         glfwSetCursorPosCallback(window, MousePositionCallback); // Mouse position
+        glfwSetScrollCallback(window, ScrollCallback); // Scroll
     }
 
     InputManager::~InputManager()
@@ -50,9 +54,24 @@ namespace ara {
         return gMouseY;
     }
 
+    double InputManager::GetScrollX()
+    {
+        return gScrollX;
+    }
+
+    double InputManager::GetScrollY()
+    {
+        return gScrollY;
+    }
+
     bool InputManager::CanUpdate()
     {
         return gCanUpdate;
+    }
+
+    void InputManager::SetCanUpdate(bool canUpdate)
+    {
+        gCanUpdate = canUpdate;
     }
     
     // **********************************
@@ -77,6 +96,12 @@ namespace ara {
     {
         gMouseX = xpos;
         gMouseY = ypos;
+    }
+
+    void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+    {
+        gScrollX = xoffset;
+        gScrollY = yoffset;
     }
 
 }

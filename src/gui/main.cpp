@@ -15,6 +15,8 @@
 #include "project_manager.h"
 #include "gui_scene_editor.h"
 
+#include "utils_editor.h"
+
 #include <iostream>
 
 // ARA includes
@@ -82,6 +84,10 @@ int main() {
             ImGui::DestroyContext();
         }
     );
+
+    // Editor callbacks
+    window.AddKeyEvent(CameraMovedCallback);
+    window.AddMouseScrollEvent(CameraScrollCallback);
 
     window.Run();
 

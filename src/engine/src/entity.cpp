@@ -60,6 +60,18 @@ namespace ara {
         if (!name.empty()) {
             SetName(name);
         }
+
+        ImGui::Separator();
+        ImGui::Text("Entity Specifics");
+        for (int i = 0; i < mEditModalities.size(); i++) {
+            switch (mEditModalities[i]) {
+                case EntityEditModality::Color: // Edit base color
+                    ImGui::Text("Color");
+                    ImGui::SameLine();
+                    ImGui::ColorEdit3("##Color", glm::value_ptr(gColor));
+                    break;
+            }
+        }
     }
 
 } // ara

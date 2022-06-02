@@ -25,5 +25,8 @@ file(GLOB_RECURSE SRCS
 include_directories(lib/imgui)
 include_directories(lib/imgui/misc/cpp)
 
+# c++ 20
+set(CMAKE_CXX_STANDARD 20)
+
 add_executable(gui main.cpp ${SRCS})
 target_link_libraries(gui engine glad SQLiteCpp)

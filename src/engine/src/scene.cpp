@@ -74,6 +74,9 @@ namespace ara {
                     // Write the entity position (in one line, x and y separated by a space)
                     entity_file.write((std::to_string(entity->GetPosition().x) + " " + std::to_string(entity->GetPosition().y) + "\n").c_str(), (std::to_string(entity->GetPosition().x) + " " + std::to_string(entity->GetPosition().y) + "\n").size());
 
+                    // Write the color
+                    entity_file.write((std::to_string(entity->gColor.x) + " " + std::to_string(entity->gColor.y) + " " + std::to_string(entity->gColor.z) + "\n").c_str(), (std::to_string(entity->gColor.x) + " " + std::to_string(entity->gColor.y) + " " + std::to_string(entity->gColor.z) + "\n").size());
+
                     // TODO: ENTITY DATA
 
                 entity_file.close();
@@ -103,6 +106,10 @@ namespace ara {
                     std::getline(entity_file, entity_line);
                     std::string position = entity_line;
 
+                    // color
+                    std::getline(entity_file, entity_line);
+                    std::string color = entity_line;
+
                     std::cout << "type: " << type << " name: " << name << " position: " << position << std::endl;
 
                     // Create the entity
@@ -122,6 +129,11 @@ namespace ara {
 
                     // Set the position
                     entity->SetPosition(glm::vec2(std::stof(position.substr(0, position.find(" "))), std::stof(position.substr(position.find(" ") + 1))));
+                    // Set the color
+                    float x = std::stof(color.substr(0, color.find(" ")));
+                    float y = std::stof(color.substr(color.find(" ") + 1, color.find(" ")));
+                    float z = std::stof(color.substr(color.find(" ") + 1));
+                    entity->gColor = glm::vec3(x, y, z);
 
                     // TODO: ENTITY RELATED DESERIALIZATION
 

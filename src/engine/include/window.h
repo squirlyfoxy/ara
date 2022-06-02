@@ -31,6 +31,7 @@ namespace ara
 
         void AddMouseMovedEvent(std::function<void(float, float)> event);
         void AddMouseButtonEvent(std::function<void(InputManager*)> event);
+        void AddMouseScrollEvent(std::function<void(InputManager*)> event);
         void AddKeyEvent(std::function<void(InputManager*)> event);
 
         // Getters
@@ -73,6 +74,8 @@ namespace ara
         std::vector<std::function<void(float, float)>> mMouseEvents;
         // Mouse button pressed
         std::vector<std::function<void(InputManager*)>> mMouseButtonEvents;
+        // Mouse wheel scrolled
+        std::vector<std::function<void(InputManager*)>> mScrollEvents;
         // Key pressed
         std::vector<std::function<void(InputManager*)>> mKeyEvents;
 

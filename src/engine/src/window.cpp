@@ -92,6 +92,12 @@ namespace ara
                 callback(mInputManager);
             }
 
+            // Call the mouse wheel callbacks
+            for (auto& callback : mScrollEvents)
+            {
+                callback(mInputManager);
+            }
+
             // Call the key callbacks
             for (auto& callback : mKeyEvents)
             {
@@ -151,6 +157,11 @@ namespace ara
     void Window::AddMouseButtonEvent(std::function<void(InputManager*)> event)
     {
         mMouseButtonEvents.push_back(event);
+    }
+
+    void Window::AddMouseScrollEvent(std::function<void(InputManager*)> event)
+    {
+        mScrollEvents.push_back(event);
     }
 
     void Window::AddKeyEvent(std::function<void(InputManager*)> event)

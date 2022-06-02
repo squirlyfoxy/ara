@@ -38,6 +38,8 @@ namespace ara {
         Init();
 
         gColor = glm::vec3(1.0f, 1.0f, 1.0f);
+
+        // Edit modalities
         mEditModalities.push_back(EntityEditModality::Color);
     }
     
@@ -89,8 +91,6 @@ namespace ara {
         BasicEdit();
 
         // TODO: SQARE EDIT
-        
-        ImGui::ColorEdit3("Color", glm::value_ptr(gColor));
     }
     
 } // ara

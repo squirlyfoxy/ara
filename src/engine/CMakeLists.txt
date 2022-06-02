@@ -25,6 +25,9 @@ file(GLOB_RECURSE SRCS
     ../gui/lib/imgui/imgui/misc/cpp/*.cpp
 )
 
+# c++ 20
+set(CMAKE_CXX_STANDARD 20)
+
 # will build as a dynamic library
 add_library(engine SHARED ${SRCS})
 

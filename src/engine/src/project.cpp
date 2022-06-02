@@ -173,7 +173,7 @@ namespace ara {
 
             if (l_count == 2) {
                 // Set the creation time
-                project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoi(line)));
+                //project.SetCreationTime(std::chrono::system_clock::from_time_t(std::stoi(line)));
                 continue;
             }
 

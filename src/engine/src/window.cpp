@@ -92,12 +92,6 @@ namespace ara
                 callback(mInputManager);
             }
 
-            // Call the mouse wheel callbacks
-            for (auto& callback : mScrollEvents)
-            {
-                callback(mInputManager);
-            }
-
             // Call the key callbacks
             for (auto& callback : mKeyEvents)
             {
@@ -109,6 +103,12 @@ namespace ara
         for (auto& callback : mMouseEvents)
         {
             callback(mInputManager->GetMouseX(), mInputManager->GetMouseY());
+        }
+
+        // Call the mouse wheel callbacks
+        for (auto& callback : mScrollEvents)
+        {
+            callback(mInputManager);
         }
     }
 

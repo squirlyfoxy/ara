@@ -1,5 +1,7 @@
 #include "window_input.h"
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 
 namespace ara {
@@ -102,6 +104,8 @@ namespace ara {
     {
         gScrollX = xoffset;
         gScrollY = yoffset;
+
+        std::cout << "Scroll: " << xoffset << ", " << yoffset << std::endl;
     }
 
 }

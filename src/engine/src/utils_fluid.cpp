@@ -1,6 +1,7 @@
 #include "utils_fluids.h"
 
 #include <fstream>
+#include <filesystem>
 #include <iostream>
 
 namespace ara {
@@ -30,6 +31,23 @@ namespace ara {
         fclose(file);
 
         return fileContent;
+    #endif
+    }
+
+    std::vector<std::string> GetFilesByExtension(const std::string& path, const std::string& extension) {
+        std::vector<std::string> files;
+
+    #ifdef ARA_WEB
+        // TODO: IF WEB, NOT IMPLEMENTED YET
+        return files;
+    #else
+        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+            if (entry.path().extension() == extension) {
+                files.push_back(entry.path().string());
+            }
+        }
+
+        return files;
     #endif
     }
 

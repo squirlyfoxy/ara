@@ -30,18 +30,14 @@ glm::mat4 GetEditorViewMatrix() {
     return view;
 }
 
-#include <iostream>
-
-void Zoom(float delta) {
+void ZoomCamera(float delta) {
     gZoom = glm::clamp(gZoom + delta, 0.1f, 100.0f);
     if (gZoom == 0.0f) {
         gZoom = 0.1f;
     }
-
-    std::cout << "Zoom: " << gZoom << std::endl;
 }
 
-void Move(float _posX, float _posY) {
+void MoveCamera(float _posX, float _posY) {
     if (cantMove) return;
 
     posX = _posX;
@@ -63,19 +59,19 @@ void CameraMovedCallback(ara::InputManager* inputManager) {
     
     // IF ctrl + wasd
     if (inputManager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(GLFW_KEY_W)) {
-        Move(GetCameraPositionX(), GetCameraPositionY() + velocity);
+        MoveCamera(GetCameraPositionX(), GetCameraPositionY() + velocity);
     }
 
     if (inputManager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(GLFW_KEY_S)) {
-        Move(GetCameraPositionX(), GetCameraPositionY() - velocity);
+        MoveCamera(GetCameraPositionX(), GetCameraPositionY() - velocity);
     }
 
     if (inputManager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(GLFW_KEY_A)) {
-        Move(GetCameraPositionX() + velocity, GetCameraPositionY());
+        MoveCamera(GetCameraPositionX() + velocity, GetCameraPositionY());
     }
 
     if (inputManager->IsKeyPressed(GLFW_KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(GLFW_KEY_D)) {
-        Move(GetCameraPositionX() - velocity, GetCameraPositionY());
+        MoveCamera(GetCameraPositionX() - velocity, GetCameraPositionY());
     }
 }
 
@@ -86,7 +82,7 @@ void CameraScrollCallback(ara::InputManager* inputManager) {
     float yoffset = inputManager->GetScrollY();
 
     if (yoffset != 0.0f) {
-        Zoom(-yoffset * velocity);
+        ZoomCamera(-yoffset * velocity);
     }
 
     cantMove = false;

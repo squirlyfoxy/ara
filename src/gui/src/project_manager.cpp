@@ -1,6 +1,7 @@
 #include "project_manager.h"
 
 #include "utils_editor.h"
+#include "utils_fluids.h"
 #include "utils_transforms.h"
 #include "gui_scene_editor.h"
 
@@ -47,6 +48,33 @@ ProjectManager::ProjectManager() {
         // Add the project to the map
         mProjects[projectName] = project;
         //mCurrentProject = projectName;
+    }
+
+    // Clean up project
+    for (auto& project : mProjects) {
+        for (auto& scene : project.second.gScenes) {
+            std::string path = "./projects/" + project.second.GetName() + "/" + scene.GetName();
+
+            std::vector<std::string> files = ara::GetFilesByExtension(path, ".ent");
+            
+            // Loop through all entities
+            for (auto& ent : scene.gEntities) {
+                std::string ent_path = path + "/" + ent->GetName() + ".ent";
+
+                // Remove ent_path from files
+                for (auto& file : files) {
+                    if (file == ent_path) {
+                        files.erase(std::remove(files.begin(), files.end(), file), files.end());
+                        break;
+                    }
+                }
+            }
+
+            // Remove all files that are not entities
+            for (auto& file : files) {
+                fs::remove(file);
+            }
+        }
     }
 
     ara::SetProjectionCallback(std::bind(GetEditorProjectionMatrix));

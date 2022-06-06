@@ -4,11 +4,17 @@
 
 #include "window_input.h"
 
+// ******************************************************
+// Editor Matrix
+
 glm::mat4 GetEditorProjectionMatrix();
 glm::mat4 GetEditorViewMatrix();
 
-void Zoom(float delta);
-void Move(float _posX, float _posY);
+// *******************************************************
+// Editor Camera
+
+void ZoomCamera(float delta);
+void MoveCamera(float _posX, float _posY);
 
 float GetCameraPositionX();
 float GetCameraPositionY();

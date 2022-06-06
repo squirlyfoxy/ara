@@ -8,12 +8,12 @@
 #define ARA_API __declspec(dllimport)
 #endif
 
-#define ARA_INCLUDE_OS #include <windows.h>
+#define ARA_INCLUDE_OS \ #include <windows.h>
 
 #elif defined __APPLE__
 #define ARA_API
 
-#define ARA_INCLUDE_OS #include <TargetConditionals.h>
+#define ARA_INCLUDE_OS \ #include <TargetConditionals.h>
 
 #else
 // Linux or MacOS

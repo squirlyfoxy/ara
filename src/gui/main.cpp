@@ -20,7 +20,6 @@
 #include <iostream>
 
 // ARA includes
-#include <shader.h>
 #include <window.h>
 
 int main() {

@@ -1,10 +1,16 @@
 #include "entity.h"
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "imgui.h"
 #include "imgui_stdlib.h"
+
+#include "entity_camera.h"
+#include "entity_square.h"
+#include "entity_empty.h"
 
 namespace ara {
 
@@ -72,6 +78,65 @@ namespace ara {
                     break;
             }
         }
+    }
+
+    void Entity::Save(std::ofstream& file, Entity& entity) {
+        // Write the entity name and type ([type]|[name])
+        file.write((entity.GetType() + "|" + entity.GetName() + "\n").c_str(), entity.GetType().size() + entity.GetName().size() + 2);
+
+        // Write the entity position (in one line, x and y separated by a space)
+        file.write((std::to_string(entity.GetPosition().x) + " " + std::to_string(entity.GetPosition().y) + "\n").c_str(), (std::to_string(entity.GetPosition().x) + " " + std::to_string(entity.GetPosition().y) + "\n").size());
+
+        // Write the color
+        file.write((std::to_string(entity.gColor.x) + " " + std::to_string(entity.gColor.y) + " " + std::to_string(entity.gColor.z) + "\n").c_str(), (std::to_string(entity.gColor.x) + " " + std::to_string(entity.gColor.y) + " " + std::to_string(entity.gColor.z) + "\n").size());
+    
+        entity.Save(file);
+    }
+
+    Entity* Entity::Load(std::istringstream& file) {
+        Entity *entity = nullptr;
+
+        std::string entity_line;
+        std::getline(file, entity_line);
+
+        std::string type_name = entity_line;
+        std::string type = type_name.substr(0, type_name.find("|"));
+        std::string name = type_name.substr(type_name.find("|") + 1);
+
+        std::getline(file, entity_line);
+        std::string position = entity_line;
+
+        // color
+        std::getline(file, entity_line);
+        std::string color = entity_line;
+
+        // Create the entity
+        if (type == "EntityCamera") {
+            entity = new EntityCamera();
+        } else if (type == "EntitySquare") {
+            entity = new EntitySquare();
+        } else if (type == "EntityEmpty") {
+            entity = new EntityEmpty();
+        } else {
+            // TODO: ERROR
+
+            std::cout << "ERROR: Unknown entity type: " << type << std::endl;
+        }
+
+        entity->SetName(name);
+
+        // Set the position
+        entity->SetPosition(glm::vec2(std::stof(position.substr(0, position.find(" "))), std::stof(position.substr(position.find(" ") + 1))));
+        // Set the color
+        float x = std::stof(color.substr(0, color.find(" ")));
+        float y = std::stof(color.substr(color.find(" ") + 1, color.find(" ")));
+        float z = std::stof(color.substr(color.find(" ") + 1));
+        entity->gColor = glm::vec3(x, y, z);
+
+        // Custom deserialization
+        entity->CustomLoad(file);
+
+        return entity;
     }
 
 } // ara

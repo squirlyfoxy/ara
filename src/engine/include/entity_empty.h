@@ -16,6 +16,10 @@ namespace ara {
         virtual void Render();
         virtual void Edit();
 
+    protected:
+        virtual void Save(std::ofstream& file);
+        virtual void CustomLoad(std::istringstream& file);
+
     private:
     
     };

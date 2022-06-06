@@ -17,6 +17,14 @@ namespace ara {
         // NOTE: Nothing
     }
 
+    void EntityCamera::Save(std::ofstream& file) {
+        // NOTE: Nothing
+    }
+
+    void EntityCamera::CustomLoad(std::istringstream& file) {
+        // NOTE: Nothing
+    }
+
     const glm::mat4& EntityCamera::GetViewMatrix() const {
         return glm::lookAt(glm::vec3(mPosition, 0.0f), glm::vec3(mPosition, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     }

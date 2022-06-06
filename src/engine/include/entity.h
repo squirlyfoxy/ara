@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 #include <glm/glm.hpp>
 
@@ -40,6 +42,10 @@ namespace ara {
 
         glm::vec3 gColor;
 
+        // Static methods
+        static void     Save(std::ofstream& file, Entity& entity);
+        static Entity*  Load(std::istringstream& file);
+
     protected:
         std::string mName;
         glm::vec2 mPosition;
@@ -52,6 +58,12 @@ namespace ara {
 
         // Called when in edit mode, will edit name and position
         void BasicEdit();
+
+        // Called when saving the entity to a file
+        virtual void Save(std::ofstream& file) = 0;
+
+        // Called when we need to deserialize the entity from a file
+        virtual void CustomLoad(std::istringstream& file) = 0;
 
         std::string mType;
 

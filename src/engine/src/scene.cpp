@@ -2,10 +2,6 @@
 
 #include "utils_fluids.h"
 
-#include "entity_camera.h"
-#include "entity_square.h"
-#include "entity_empty.h"
-
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -68,14 +64,7 @@ namespace ara {
                     entity_file.seekp(0, std::ios::end);
                     entity_file.seekp(0, std::ios::beg);
 
-                    // Write the entity name and type ([type]|[name])
-                    entity_file.write((entity->GetType() + "|" + entity->GetName() + "\n").c_str(), entity->GetType().size() + entity->GetName().size() + 2);
-
-                    // Write the entity position (in one line, x and y separated by a space)
-                    entity_file.write((std::to_string(entity->GetPosition().x) + " " + std::to_string(entity->GetPosition().y) + "\n").c_str(), (std::to_string(entity->GetPosition().x) + " " + std::to_string(entity->GetPosition().y) + "\n").size());
-
-                    // Write the color
-                    entity_file.write((std::to_string(entity->gColor.x) + " " + std::to_string(entity->gColor.y) + " " + std::to_string(entity->gColor.z) + "\n").c_str(), (std::to_string(entity->gColor.x) + " " + std::to_string(entity->gColor.y) + " " + std::to_string(entity->gColor.z) + "\n").size());
+                    Entity::Save(entity_file, *entity);
 
                     // TODO: ENTITY DATA
 
@@ -96,44 +85,8 @@ namespace ara {
                 // Create a file for the entity (.ent)t
                 std::istringstream entity_file(GetFileContent(scene_path + "/" + line + ".ent"));
                     // First line the type and name, the following the position of the entity
-                    std::string entity_line;
-                    std::getline(entity_file, entity_line);
-
-                    std::string type_name = entity_line;
-                    std::string type = type_name.substr(0, type_name.find("|"));
-                    std::string name = type_name.substr(type_name.find("|") + 1);
-
-                    std::getline(entity_file, entity_line);
-                    std::string position = entity_line;
-
-                    // color
-                    std::getline(entity_file, entity_line);
-                    std::string color = entity_line;
-
-                    std::cout << "type: " << type << " name: " << name << " position: " << position << std::endl;
-
-                    // Create the entity
-                    // TODO: MOVE THIS TO A FUNCTION
-                    Entity* entity = nullptr;
-                    if (type == "EntityCamera") {
-                        entity = new EntityCamera();
-                    } else if (type == "EntitySquare") {
-                        entity = new EntitySquare();
-                    } else if (type == "EntityEmpty") {
-                        entity = new EntityEmpty();
-                    } else {
-                        std::cout << "ERROR: Unknown entity type: " << type << std::endl;
-                    }
-
-                    entity->SetName(name);
-
-                    // Set the position
-                    entity->SetPosition(glm::vec2(std::stof(position.substr(0, position.find(" "))), std::stof(position.substr(position.find(" ") + 1))));
-                    // Set the color
-                    float x = std::stof(color.substr(0, color.find(" ")));
-                    float y = std::stof(color.substr(color.find(" ") + 1, color.find(" ")));
-                    float z = std::stof(color.substr(color.find(" ") + 1));
-                    entity->gColor = glm::vec3(x, y, z);
+ 
+                    Entity* entity = Entity::Load(entity_file);
 
                     // TODO: ENTITY RELATED DESERIALIZATION
 

@@ -40,7 +40,9 @@ namespace ara {
         gColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
         // Edit modalities
-        mEditModalities.push_back(EntityEditModality::Color);
+        mEditModalities = {
+            EntityEditModality::Color
+        };
     }
     
     void EntitySquare::Render() {
@@ -58,6 +60,14 @@ namespace ara {
         glBindVertexArray(sqare_vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+    }
+
+    void EntitySquare::Save(std::ofstream& file) {
+        // NOTE: Nothing
+    }
+
+    void EntitySquare::CustomLoad(std::istringstream& file) {
+        // NOTE: Nothing
     }
 
     void EntitySquare::Init() {

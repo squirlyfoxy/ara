@@ -14,6 +14,14 @@ namespace ara {
         // NOTE: Nothing
     }
 
+    void EntityEmpty::Save(std::ofstream& file) {
+        // NOTE: Nothing
+    }
+
+    void EntityEmpty::CustomLoad(std::istringstream& file) {
+        // NOTE: Nothing
+    }
+
     void EntityEmpty::Edit() {
         BasicEdit();
 

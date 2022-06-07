@@ -137,7 +137,7 @@ void gui_render_scene(ara::Scene s) {
         // TODO: Render the scene editor
         DrawGrid();
 
-        // Render the scene
+        // Render the scene without physics
         s.Render(false);
 
     unbind_scene_editor_framebuffer();

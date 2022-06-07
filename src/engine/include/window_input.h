@@ -15,6 +15,8 @@ namespace ara {
         InputManager(GLFWwindow* window);
         ~InputManager();
 
+        void Reset();
+
         static bool IsKeyPressed(int key);
         static bool IsMouseButtonPressed(int button);
 
@@ -25,6 +27,7 @@ namespace ara {
         static double GetScrollY();
 
         bool CanUpdate();
+        bool CanScrollUpdate();
         void SetCanUpdate(bool canUpdate);
 
     private:

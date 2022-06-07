@@ -12,6 +12,7 @@ namespace ara {
     static double gScrollX, gScrollY;
 
     static bool gCanUpdate = false;
+    static bool gCanScrollUpdate = false;
     static int gUpdatesSinceMouse = 0;
 
     // **********************************
@@ -30,6 +31,12 @@ namespace ara {
 
     InputManager::~InputManager()
     {
+    }
+
+    void InputManager::Reset()
+    {
+        gScrollX = 0.0;
+        gScrollY = 0.0;
     }
 
     bool InputManager::IsKeyPressed(int key)
@@ -71,11 +78,15 @@ namespace ara {
         return gCanUpdate;
     }
 
+    bool InputManager::CanScrollUpdate()
+    {
+        return gCanScrollUpdate;
+    }
+
     void InputManager::SetCanUpdate(bool canUpdate)
     {
         gCanUpdate = canUpdate;
     }
-    
     // **********************************
 
     void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -102,10 +113,12 @@ namespace ara {
 
     void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
     {
+        // If scroll is not zero, then we can update
+        if (yoffset != 0) gCanScrollUpdate = true;
+        else gCanScrollUpdate = false;
+
         gScrollX = xoffset;
         gScrollY = yoffset;
-
-        std::cout << "Scroll: " << xoffset << ", " << yoffset << std::endl;
     }
 
 }

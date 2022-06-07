@@ -106,9 +106,14 @@ namespace ara
         }
 
         // Call the mouse wheel callbacks
-        for (auto& callback : mScrollEvents)
+        if (mInputManager->CanScrollUpdate())
         {
-            callback(mInputManager);
+            for (auto& callback : mScrollEvents)
+            {
+                callback(mInputManager);
+            }
+
+            mInputManager->Reset();
         }
     }
 

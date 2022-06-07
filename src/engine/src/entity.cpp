@@ -64,6 +64,8 @@ namespace ara {
         std::string name = mName;
         ImGui::InputText("##Name", &name);
         if (!name.empty()) {
+            // TODO: Check if name is unique, if not, error
+
             SetName(name);
         }
 

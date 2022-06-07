@@ -10,7 +10,7 @@ namespace ara {
     }
 
     // Render the camera
-    void EntityEmpty::Render() {
+    void EntityEmpty::Render(bool selected) {
         // NOTE: Nothing
     }
 

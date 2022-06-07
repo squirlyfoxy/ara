@@ -13,7 +13,7 @@ namespace ara {
     public:
         EntityCamera();
 
-        virtual void Render();
+        virtual void Render(bool selected = false);
         virtual void Edit();
 
         const glm::mat4& GetViewMatrix() const;

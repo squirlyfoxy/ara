@@ -25,7 +25,7 @@ namespace ara {
         // Methods
 
         // Called every frame when needed, the child entities of this class need to implement this method
-        virtual void Render() = 0;
+        virtual void Render(bool selected = false) = 0;
 
         // Called when editing the entity in the scene editor
         virtual void Edit() = 0;

@@ -45,7 +45,9 @@ namespace ara {
         };
     }
     
-    void EntitySquare::Render() {
+    void EntitySquare::Render(bool selected) {
+        if (selected) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
         shader->Use();
 
         glm::mat4 model = glm::mat4(1.0f);
@@ -60,6 +62,8 @@ namespace ara {
         glBindVertexArray(sqare_vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+
+        if (selected) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
     void EntitySquare::Save(std::ofstream& file) {

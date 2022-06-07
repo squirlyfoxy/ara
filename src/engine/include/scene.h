@@ -32,7 +32,6 @@ namespace ara {
         static void Save(const std::string scene_path, Scene& scene); // Save the scene to a file
         static void Load(const std::string scene_path, Scene& scene); // Load the scene from a file
 
-
         std::vector<Entity*> gEntities;
 
     private:

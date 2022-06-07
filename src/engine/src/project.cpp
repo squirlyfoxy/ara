@@ -1,6 +1,9 @@
 #include "project.h"
 
+#include "lib/json.hpp"
+
 #include "utils_fluids.h"
+#include "utils_data.h"
 
 #include <iostream>
 #include <sstream>
@@ -108,6 +111,22 @@ namespace ara {
         for (int i = 0; i < gScenes.size(); i++) {
             if (gScenes[i].GetName() == scene.GetName()) {
                 mCurrentSceneIndex = i;
+
+                CustomerData entities;
+                for (auto& e : gScenes[i].GetEntities()) {
+                    // Save a json object with the entity data (we need name and if_selected)
+                    nlohmann::json j;
+                    j["name"] = e->GetName();
+                    j["if_selected"] = false;
+
+                    std::stringstream ss;
+                    ss << j;
+
+                    entities.mData[e->GetName()] = ss.str();
+                }
+
+                ARA_SET_CUSTOMER_DATA("entities", entities);
+
                 return;
             }
         }

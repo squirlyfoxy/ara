@@ -1,6 +1,9 @@
 #include "scene.h"
 
+#include "lib/json.hpp"
+
 #include "utils_fluids.h"
+#include "utils_data.h"
 
 #include <fstream>
 #include <sstream>
@@ -23,7 +26,10 @@ namespace ara {
         if (physics) Update();
 
         for (auto& entity : GetEntities()) {
-            entity->Render();
+            // If ARA_GET_CUSTOMER_DATA("entities") is not empty, then we will use it
+            bool selected = nlohmann::json::parse(ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()]).at("if_selected");
+
+            entity->Render(selected);
         }
     }
 

@@ -1,5 +1,7 @@
 #include "gui_scene_editor.h"
 
+#include "lib/json.hpp"
+
 #include "project_manager.h"
 #include "grid.h"
 
@@ -11,6 +13,7 @@
 #include "imgui_stdlib.h"
 
 #include <gl_framebuffer.h>
+#include <utils_data.h>
 
 ara::Framebuffer* mSceneEditorFramebuffer;
 
@@ -107,6 +110,13 @@ void gui_render_scene_editor(ara::Scene s) {
                         }
 
                         selected_entity = entities[i];
+
+                        // get data and set it
+                        for (auto& entity : entities) {
+                            nlohmann::json j = nlohmann::json::parse(ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()]);
+                            j["if_selected"] = entity->GetName() == selected_entity->GetName();
+                            ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()] = j.dump();
+                        }
 
                         ImGui::TreePop();
                     }

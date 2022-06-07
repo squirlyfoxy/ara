@@ -13,7 +13,7 @@ namespace ara {
     public:
         EntityEmpty();
 
-        virtual void Render();
+        virtual void Render(bool selected = false);
         virtual void Edit();
 
     protected:

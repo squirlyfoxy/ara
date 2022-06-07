@@ -12,7 +12,7 @@ namespace ara {
     public:
         EntitySquare();
 
-        virtual void Render();
+        virtual void Render(bool selected = false);
         virtual void Edit();
 
     protected:

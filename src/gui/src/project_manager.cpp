@@ -99,6 +99,11 @@ void ProjectManager::SetCurrentProject(std::string projectName) {
     }
 
     mCurrentProject = projectName;
+
+    // Set the current scene
+    if (mProjects[projectName].gScenes.size() > 0) {
+        mProjects[projectName].SetCurrentScene(mProjects[projectName].gScenes[0].GetName());
+    }
 }
 
 int ProjectManager::GetProjectCount() {

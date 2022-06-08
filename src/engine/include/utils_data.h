@@ -16,8 +16,7 @@ namespace ara {
     // * This will save custom data into RAM
     // *
 
-    class ARA_API CustomerData {
-    public:
+    struct ARA_API CustomerData {
         CustomerData();
         ~CustomerData();
 

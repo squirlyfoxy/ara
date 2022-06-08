@@ -45,7 +45,7 @@ ProjectManager::ProjectManager() {
         // Create a new project
         ara::Project project;
         project = ara::Project::ReadProject(projectPath + "/" + projectName + ".ara");
-        
+
         // Add the project to the map
         mProjects[projectName] = project;
         //mCurrentProject = projectName;
@@ -78,7 +78,7 @@ ProjectManager::ProjectManager() {
         }
     }
 
-    // Set the current edited path
+    // Set the current edited
     ara::CustomerData engine;
     engine.mData["current_path"] = "./projects/";
     ARA_SET_CUSTOMER_DATA("engine", engine);

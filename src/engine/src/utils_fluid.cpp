@@ -36,6 +36,11 @@ namespace ara {
     #endif
     }
 
+    long FileSize(const std::string& filePath) {
+        std::ifstream file(filePath, std::ios::binary | std::ios::ate);
+        return file.tellg();
+    }
+
     std::vector<File> GetFilesByExtension(const std::string& path, const std::string& extension) {
         std::vector<File> files;
 
@@ -64,7 +69,7 @@ namespace ara {
         return files;
     #else
         for (const auto& entry : ALL_DIRECTORY_ITERATOR(path)) {
-            FileType type = FileType::Directory;
+            FileType type = FileType::GenericFile;
             if (entry.path().extension() == ".sara") {
                 type = FileType::Scene;
             } else if (entry.path().extension() == ".ent") {

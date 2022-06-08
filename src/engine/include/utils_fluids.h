@@ -12,7 +12,8 @@ namespace ara {
         Scene,
         Entity,
         Directory,
-        Project
+        Project,
+        GenericFile
     };
 
     struct File {
@@ -36,6 +37,9 @@ namespace ara {
 
     // Returns the content of the file at the given path
     ARA_API const char* GetFileContent(const std::string& filePath);
+
+    // Returns the size of the file at the given path
+    ARA_API long FileSize(const std::string& filePath);
 
     // Get files by extension
     ARA_API std::vector<File> GetFilesByExtension(const std::string& path, const std::string& extension);

@@ -13,15 +13,22 @@
 #include "imgui_stdlib.h"
 
 #include <gl_framebuffer.h>
+#include <texture.h>
 #include <utils_data.h>
 #include <utils_fluids.h>
 
 ara::Framebuffer* mSceneEditorFramebuffer;
 
+ara::Texture* mFolderIcon;
+ara::Texture* mGeneralFileIcon;
+
 void initialize_scene_editor() {
     mSceneEditorFramebuffer = new ara::Framebuffer(800, 600);
 
     GenerateGridBuffers();
+
+    mFolderIcon = new ara::Texture("./assets/icons/folder.png");
+    mGeneralFileIcon = new ara::Texture("./assets/icons/file.png");
 }
 
 void destroy_scene_editor_framebuffer() {
@@ -49,7 +56,7 @@ std::string old_scene_name = "";
 
 bool gui_edit_entity_open = false;
 ara::Entity* selected_entity;
-void gui_edit_entity() {
+void gui_edit_entity() { // TODO: MOVE TO A CLASS
     ImGui::Begin("Edit Entity", &gui_edit_entity_open);
         ImGui::Text(("Editing " + selected_entity->GetName()).c_str());
         ImGui::Separator();
@@ -58,8 +65,6 @@ void gui_edit_entity() {
 
     ImGui::End();
 }
-
-#include <iostream>
 
 void gui_render_scene_editor(ara::Scene s) {
     ImGui::Begin(std::string("Scene Editor - " + s.GetName()).c_str(), nullptr, ImGuiWindowFlags_NoResize);
@@ -76,20 +81,20 @@ void gui_render_scene_editor(ara::Scene s) {
         ImVec2 pos = ImGui::GetCursorScreenPos();
 
         ImGui::GetWindowDrawList()->AddImage(
-            (void*)mSceneEditorFramebuffer->GetTexture(),
+            (ImTextureID)mSceneEditorFramebuffer->GetTexture(),
             ImVec2(pos.x, pos.y),
             ImVec2(pos.x + 800, pos.y + 600)
         );
     ImGui::End();
 
     // List of the scenes in the project
-    ImGui::Begin("Explorer", nullptr);
+    ImGui::Begin("Explorer", nullptr); // TODO: MOVE TO A CLASS
         int width = ImGui::GetContentRegionAvail().x;
         int columnCount = width / 200; if (columnCount < 1) columnCount = 1;
         float cellWidth = width / columnCount;
 
         std::vector<ara::File> f = ara::GetFiles(ARA_GET_CUSTOMER_DATA("engine").mData["current_path"]);
-        // Add at the beginning ../ (back)
+        // Add at the beginning ../ (going back)
         f.push_back({
             Name: "../",
             Path: "/../",
@@ -100,7 +105,23 @@ void gui_render_scene_editor(ara::Scene s) {
         ImGui::Columns(columnCount, 0, false);
 
         for (const auto& file : f) {
-            if(ImGui::Button(file.Name.c_str(), {cellWidth, cellWidth})) {
+            // If directory, add a folder icon as button
+            if (file.Type == ara::FileType::Directory) {
+                ImGui::ImageButton(
+                    (ImTextureID)mFolderIcon->GetId(),
+                    ImVec2(cellWidth, cellWidth),
+                    ImVec2(0, 1),
+                    ImVec2(1, 0)
+                );
+            } else {
+                ImGui::ImageButton(
+                    (ImTextureID)mGeneralFileIcon->GetId(),
+                    ImVec2(cellWidth, cellWidth),
+                    ImVec2(0, 1),
+                    ImVec2(1, 0)
+                );
+            }
+            if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
                 if (file.Type == ara::FileType::Directory) {
                     ara::CustomerData engine = ARA_GET_CUSTOMER_DATA("engine");
                     if (file.Path == "/../") {
@@ -109,6 +130,12 @@ void gui_render_scene_editor(ara::Scene s) {
                         engine.mData["current_path"] = file.Path;
                     }
                     ARA_SET_CUSTOMER_DATA("engine", engine);
+                    break;
+                } else if (file.Type == ara::FileType::Scene) {
+                    break;
+                } else if (file.Type == ara::FileType::Entity) {
+                    break;
+                } else if (file.Type == ara::FileType::Project) {
                     break;
                 }
             }
@@ -119,7 +146,7 @@ void gui_render_scene_editor(ara::Scene s) {
     ImGui::End();
 
     // List of the entities in the scene
-    ImGui::Begin("Entities");
+    ImGui::Begin("Entities"); // TODO: MOVE TO A CLASS
         if (GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities().size() == 0) {
             ImGui::Text("No entities in this scene");
         } else {

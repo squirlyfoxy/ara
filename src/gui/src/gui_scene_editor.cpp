@@ -1,5 +1,7 @@
 #include "gui_scene_editor.h"
 
+#include <iostream>
+
 #include "lib/json.hpp"
 
 #include "project_manager.h"
@@ -20,6 +22,8 @@
 ara::Framebuffer* mSceneEditorFramebuffer;
 
 ara::Texture* mFolderIcon;
+ara::Texture* mSaraFileIcon;
+ara::Texture* mEntFileIcon;
 ara::Texture* mGeneralFileIcon;
 
 void initialize_scene_editor() {
@@ -28,6 +32,8 @@ void initialize_scene_editor() {
     GenerateGridBuffers();
 
     mFolderIcon = new ara::Texture("./assets/icons/folder.png");
+    mSaraFileIcon = new ara::Texture("./assets/icons/file_sara.png");
+    mEntFileIcon = new ara::Texture("./assets/icons/file_ent.png");
     mGeneralFileIcon = new ara::Texture("./assets/icons/file.png");
 }
 
@@ -113,6 +119,20 @@ void gui_render_scene_editor(ara::Scene s) {
                     ImVec2(0, 1),
                     ImVec2(1, 0)
                 );
+            } else if (file.Type == ara::FileType::Scene) {
+                ImGui::ImageButton(
+                    (ImTextureID)mSaraFileIcon->GetId(),
+                    ImVec2(cellWidth, cellWidth),
+                    ImVec2(0, 1),
+                    ImVec2(1, 0)
+                );
+            } else if (file.Type == ara::FileType::Entity) {
+                ImGui::ImageButton(
+                    (ImTextureID)mEntFileIcon->GetId(),
+                    ImVec2(cellWidth, cellWidth),
+                    ImVec2(0, 1),
+                    ImVec2(1, 0)
+                );
             } else {
                 ImGui::ImageButton(
                     (ImTextureID)mGeneralFileIcon->GetId(),
@@ -120,7 +140,8 @@ void gui_render_scene_editor(ara::Scene s) {
                     ImVec2(0, 1),
                     ImVec2(1, 0)
                 );
-            }
+            } 
+            
             if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
                 if (file.Type == ara::FileType::Directory) {
                     ara::CustomerData engine = ARA_GET_CUSTOMER_DATA("engine");
@@ -132,10 +153,26 @@ void gui_render_scene_editor(ara::Scene s) {
                     ARA_SET_CUSTOMER_DATA("engine", engine);
                     break;
                 } else if (file.Type == ara::FileType::Scene) {
+                    // remove the ".sara" extension
+                    std::string scene_name = file.Name.substr(0, file.Name.size() - 5);
+                    GetProjectManager()->GetCurrentProject()->SetCurrentScene(scene_name);
+
                     break;
                 } else if (file.Type == ara::FileType::Entity) {
+                    // TODO
+
                     break;
                 } else if (file.Type == ara::FileType::Project) {
+                    // remove from the name of the file ".ara"
+                    std::string project_name = file.Name.substr(0, file.Name.size() - 4);
+                    if (project_name == GetProjectManager()->GetCurrentProject()->GetName()) {
+                        break;
+                    }
+                    
+                    if (ara::gui::SimpleYesNoBox("Are you sure?", "Do you want to open the project " + project_name + "?\nUnsaved changes will be lost.")) {
+                        GetProjectManager()->SetCurrentProject(project_name);
+                    }
+
                     break;
                 }
             }
@@ -143,6 +180,12 @@ void gui_render_scene_editor(ara::Scene s) {
 
             ImGui::NextColumn();
         }
+
+        // Footer
+        ImGui::Columns(1);
+        ImGui::Separator();
+        ImGui::Text("Files: %d", (f.size() - 1));
+
     ImGui::End();
 
     // List of the entities in the scene

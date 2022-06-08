@@ -108,6 +108,14 @@ namespace ara {
     }
 
     void Project::SetCurrentScene(const Scene& scene) {
+        if (gScenes[mCurrentSceneIndex].GetName() == scene.GetName()) {
+            CustomerData engine = ARA_GET_CUSTOMER_DATA("engine");
+            engine.mData["current_path"] = "./projects/" + mName + "/" + scene.GetName();
+            ARA_SET_CUSTOMER_DATA("engine", engine);
+
+            return;
+        }
+
         for (int i = 0; i < gScenes.size(); i++) {
             if (gScenes[i].GetName() == scene.GetName()) {
                 mCurrentSceneIndex = i;

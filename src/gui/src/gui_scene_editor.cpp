@@ -14,6 +14,7 @@
 
 #include <gl_framebuffer.h>
 #include <utils_data.h>
+#include <utils_fluids.h>
 
 ara::Framebuffer* mSceneEditorFramebuffer;
 
@@ -58,6 +59,8 @@ void gui_edit_entity() {
     ImGui::End();
 }
 
+#include <iostream>
+
 void gui_render_scene_editor(ara::Scene s) {
     ImGui::Begin(std::string("Scene Editor - " + s.GetName()).c_str(), nullptr, ImGuiWindowFlags_NoResize);
         // Render the texture
@@ -80,11 +83,38 @@ void gui_render_scene_editor(ara::Scene s) {
     ImGui::End();
 
     // List of the scenes in the project
-    ImGui::Begin("Scenes", nullptr);
-        for (auto& scene : GetProjectManager()->GetCurrentProject()->gScenes) {
-            if (ImGui::Button(scene.GetName().c_str())) {
-                GetProjectManager()->GetCurrentProject()->SetCurrentScene(scene);
+    ImGui::Begin("Explorer", nullptr);
+        int width = ImGui::GetContentRegionAvail().x;
+        int columnCount = width / 200; if (columnCount < 1) columnCount = 1;
+        float cellWidth = width / columnCount;
+
+        std::vector<ara::File> f = ara::GetFiles(ARA_GET_CUSTOMER_DATA("engine").mData["current_path"]);
+        // Add at the beginning ../ (back)
+        f.push_back({
+            Name: "../",
+            Path: "/../",
+            Type: ara::FileType::Directory
+        });
+        std::rotate(f.rbegin(), f.rbegin() + 1, f.rend());
+
+        ImGui::Columns(columnCount, 0, false);
+
+        for (const auto& file : f) {
+            if(ImGui::Button(file.Name.c_str(), {cellWidth, cellWidth})) {
+                if (file.Type == ara::FileType::Directory) {
+                    ara::CustomerData engine = ARA_GET_CUSTOMER_DATA("engine");
+                    if (file.Path == "/../") {
+                        engine.mData["current_path"] += file.Path;
+                    } else {
+                        engine.mData["current_path"] = file.Path;
+                    }
+                    ARA_SET_CUSTOMER_DATA("engine", engine);
+                    break;
+                }
             }
+            ImGui::Text(file.Name.c_str());
+
+            ImGui::NextColumn();
         }
     ImGui::End();
 

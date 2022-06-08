@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <iostream>
 
+#define ALL_DIRECTORY_ITERATOR(path) std::filesystem::directory_iterator(path)
+
 namespace ara {
 
     const char* GetFileContent(const std::string& filePath) {
@@ -41,13 +43,43 @@ namespace ara {
         // TODO: IF WEB, NOT IMPLEMENTED YET
         return files;
     #else
-        for (const auto& entry : std::filesystem::directory_iterator(path)) {
+        for (const auto& entry : ALL_DIRECTORY_ITERATOR(path)) {
             if (entry.path().extension() == extension) {
                 files.push_back({
                     Name: entry.path().filename(),
                     Path: path + "/" + entry.path().filename().c_str()
                 });
             }
+        }
+
+        return files;
+    #endif
+    }
+
+    std::vector<File> GetFiles(const std::string& path) {
+        std::vector<File> files;
+
+    #ifdef ARA_WEB
+        // TODO: IF WEB, NOT IMPLEMENTED YET
+        return files;
+    #else
+        for (const auto& entry : ALL_DIRECTORY_ITERATOR(path)) {
+            FileType type = FileType::Directory;
+            if (entry.path().extension() == ".sara") {
+                type = FileType::Scene;
+            } else if (entry.path().extension() == ".ent") {
+                type = FileType::Entity;
+            } else if (entry.path().extension() == ".ara") {
+                type = FileType::Project;
+            } else {
+                type = FileType::Directory;
+            }
+
+            files.push_back({
+                Name: entry.path().filename(),
+                Path: path + "/" + entry.path().filename().c_str(),
+                Type: type
+            });
         }
 
         return files;

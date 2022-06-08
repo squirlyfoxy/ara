@@ -127,6 +127,11 @@ namespace ara {
 
                 ARA_SET_CUSTOMER_DATA("entities", entities);
 
+                // Update current path
+                CustomerData engine = ARA_GET_CUSTOMER_DATA("engine");
+                engine.mData["current_path"] = "./projects/" + mName + "/" + scene.GetName();
+                ARA_SET_CUSTOMER_DATA("engine", engine);
+
                 return;
             }
         }

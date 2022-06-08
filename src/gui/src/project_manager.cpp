@@ -2,6 +2,7 @@
 
 #include "utils_editor.h"
 #include "utils_fluids.h"
+#include "utils_data.h"
 #include "utils_transforms.h"
 #include "gui_scene_editor.h"
 
@@ -76,6 +77,11 @@ ProjectManager::ProjectManager() {
             }
         }
     }
+
+    // Set the current edited path
+    ara::CustomerData engine;
+    engine.mData["current_path"] = "./projects/";
+    ARA_SET_CUSTOMER_DATA("engine", engine);
 
     ara::SetProjectionCallback(std::bind(GetEditorProjectionMatrix));
     ara::SetViewCallback(std::bind(GetEditorViewMatrix));

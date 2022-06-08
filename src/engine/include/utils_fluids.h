@@ -4,8 +4,16 @@
 
 #include <vector>
 #include <string>
+#include <iterator>
 
 namespace ara {
+
+    enum class FileType {
+        Scene,
+        Entity,
+        Directory,
+        Project
+    };
 
     struct File {
         // File name
@@ -14,8 +22,15 @@ namespace ara {
         // File path
         std::string Path;
 
+        // Type
+        FileType Type;
+
         bool operator == (const File& other) const {
             return Name == other.Name && Path == other.Path;
+        }
+
+        bool operator != (const File& other) const {
+            return !(*this == other);
         }
     };
 
@@ -24,5 +39,8 @@ namespace ara {
 
     // Get files by extension
     ARA_API std::vector<File> GetFilesByExtension(const std::string& path, const std::string& extension);
+
+    // Get all files in the given path
+    ARA_API std::vector<File> GetFiles(const std::string& path);
 
 } // ara

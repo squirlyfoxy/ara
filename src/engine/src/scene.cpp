@@ -47,6 +47,17 @@ namespace ara {
 
     void Scene::AddEntity(Entity *entity) {
         gEntities.push_back(entity);
+
+        // Add the entity to the entities list
+        CustomerData data = ARA_GET_CUSTOMER_DATA("entities");
+
+        nlohmann::json j;
+        j["name"] = entity->GetName();
+        j["if_selected"] = false;
+
+        data.mData[entity->GetName()] = j.dump();
+
+        ARA_SET_CUSTOMER_DATA("entities", data);
     }
 
     void Scene::Save(const std::string scene_path, Scene& scene) {

@@ -34,8 +34,8 @@ namespace ara {
     #endif
     }
 
-    std::vector<std::string> GetFilesByExtension(const std::string& path, const std::string& extension) {
-        std::vector<std::string> files;
+    std::vector<File> GetFilesByExtension(const std::string& path, const std::string& extension) {
+        std::vector<File> files;
 
     #ifdef ARA_WEB
         // TODO: IF WEB, NOT IMPLEMENTED YET
@@ -43,7 +43,10 @@ namespace ara {
     #else
         for (const auto& entry : std::filesystem::directory_iterator(path)) {
             if (entry.path().extension() == extension) {
-                files.push_back(entry.path().string());
+                files.push_back({
+                    Name: entry.path().filename(),
+                    Path: path + "/" + entry.path().filename().c_str()
+                });
             }
         }
 

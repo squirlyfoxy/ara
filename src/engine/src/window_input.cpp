@@ -37,6 +37,8 @@ namespace ara {
     {
         gScrollX = 0.0;
         gScrollY = 0.0;
+
+        gCanScrollUpdate = false;
     }
 
     bool InputManager::IsKeyPressed(int key)

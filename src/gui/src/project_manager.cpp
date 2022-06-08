@@ -55,7 +55,7 @@ ProjectManager::ProjectManager() {
         for (auto& scene : project.second.gScenes) {
             std::string path = "./projects/" + project.second.GetName() + "/" + scene.GetName();
 
-            std::vector<std::string> files = ara::GetFilesByExtension(path, ".ent");
+            std::vector<ara::File> files = ara::GetFilesByExtension(path, ".ent");
             
             // Loop through all entities
             for (auto& ent : scene.gEntities) {
@@ -63,7 +63,7 @@ ProjectManager::ProjectManager() {
 
                 // Remove ent_path from files
                 for (auto& file : files) {
-                    if (file == ent_path) {
+                    if (file.Path == ent_path) {
                         files.erase(std::remove(files.begin(), files.end(), file), files.end());
                         break;
                     }
@@ -72,7 +72,7 @@ ProjectManager::ProjectManager() {
 
             // Remove all files that are not entities
             for (auto& file : files) {
-                fs::remove(file);
+                fs::remove(file.Path);
             }
         }
     }

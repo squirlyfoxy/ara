@@ -1,5 +1,10 @@
 #include "utils_editor.h"
 
+#include <iostream>
+#include <filesystem>
+
+#include "project_manager.h"
+
 #include "window_input_keys.h"
 
 #include <glm/glm.hpp>
@@ -86,4 +91,12 @@ void CameraScrollCallback(ara::InputManager* inputManager) {
     }
 
     cantMove = false;
+}
+
+void Save() {
+    if (GetProjectManager()->GetCurrentProject() != nullptr) {
+        std::ofstream project_file = std::ofstream("projects/" +  GetProjectManager()->GetCurrentProject()->GetName() + "/" + GetProjectManager()->GetCurrentProject()->GetName() + ".ara");
+            ara::Project::Save(&project_file, *GetProjectManager()->GetCurrentProject());
+        project_file.close();
+    }
 }

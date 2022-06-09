@@ -21,3 +21,8 @@ float GetCameraPositionY();
 
 void CameraMovedCallback(ara::InputManager* inputManager);
 void CameraScrollCallback(ara::InputManager* inputManager);
+
+// *******************************************************
+// Editor
+
+void Save();

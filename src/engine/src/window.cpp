@@ -4,6 +4,8 @@
 
 #include "gl_globals.h"
 
+#include "conf/conf_fnts.h"
+
 #include <iostream>
 
 namespace ara
@@ -19,6 +21,9 @@ namespace ara
         Init();
 
         mInputManager = new InputManager(mWindow);
+
+        // Initialize conf
+        ara::conf::DecodeFnts();
     }
 
     Window::~Window()

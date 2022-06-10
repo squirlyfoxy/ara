@@ -8,6 +8,12 @@ include_directories(../include)
 # glm
 include_directories(../lib/glm)
 
+# toml11
+include_directories(../lib/toml11)
+
+# freetype
+include_directories(../lib/freetype/include)
+
 # include imgui
 include_directories(../gui/lib/imgui)
 include_directories(../gui/lib/imgui/misc/cpp)
@@ -32,4 +38,4 @@ set(CMAKE_CXX_STANDARD 20)
 add_library(engine SHARED ${SRCS})
 
 # link against:
-target_link_libraries(engine glad glfw)
+target_link_libraries(engine glad glfw freetype)

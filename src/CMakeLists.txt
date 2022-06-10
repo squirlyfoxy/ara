@@ -19,14 +19,17 @@ configure_file(
 # binary output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
+set(BUILD_SHARED_LIBS ON)
 
 # add subdirectories (engine, gui)
 add_subdirectory(engine)
 add_subdirectory(gui)
 
+# libraries
 add_subdirectory(lib/glfw)
 add_subdirectory(lib/glad)
 add_subdirectory(lib/SQLiteCpp)
+add_subdirectory(lib/freetype)
 
 # include global libraries
 include_directories(

@@ -81,7 +81,7 @@ void GenerateGridBuffers() {
 
     glBindVertexArray(0);
 
-    grid_shader = new ara::Shader("shaders/base.vert", "shaders/grid.frag");
+    grid_shader = new ara::Shader("./shaders/base.vert", "./shaders/grid.frag");
 }
 
 void DrawGrid() {
@@ -98,5 +98,6 @@ void DrawGrid() {
 
     glBindVertexArray(grid_vao);
     glDrawElements(GL_LINES, GRID_INDICES_COUNT, GL_UNSIGNED_INT, 0);
+
     glBindVertexArray(0);
 }

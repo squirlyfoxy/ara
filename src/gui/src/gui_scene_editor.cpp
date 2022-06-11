@@ -1,6 +1,7 @@
 #include "gui_scene_editor.h"
 
 #include <iostream>
+#include <chrono>
 
 #include "grid.h"
 
@@ -14,8 +15,10 @@
 #include "imgui_stdlib.h"
 
 #include <gl_framebuffer.h>
+#include <render_text.h>
 
 ara::Framebuffer* mSceneEditorFramebuffer;
+ara::Text* mSceneEditorText;
 
 ImWindowExplorer* mExplorerWindow;
 ImWindowEntities* mEntitiesWindow;
@@ -31,6 +34,7 @@ void initialize_scene_editor() {
 
     mExplorerWindow = new ImWindowExplorer("Explorer");
     mEntitiesWindow = new ImWindowEntities("Entities");
+    mSceneEditorText = new ara::Text("", "system", glm::vec2(10.0f, 10.0f), 0.4f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void destroy_scene_editor_framebuffer() {
@@ -84,7 +88,11 @@ void gui_render_scene_editor(ara::Scene s) {
     mEntitiesWindow->Draw();
 }
 
+std::chrono::time_point<std::chrono::system_clock> begin = std::chrono::system_clock::now();
+std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::now();
 void gui_render_scene(ara::Scene s) {
+    begin = std::chrono::system_clock::now();
+
     bind_scene_editor_framebuffer();
         glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -96,5 +104,10 @@ void gui_render_scene(ara::Scene s) {
         // Render the scene without physics
         s.Render(false);
 
+        mSceneEditorText->SetText(std::string("frame time: " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(begin - end).count()) + "ms"));
+        mSceneEditorText->Render();
+
     unbind_scene_editor_framebuffer();
+
+    end = std::chrono::system_clock::now();
 }

@@ -6,7 +6,6 @@
 #include <glad/glad.h>
 
 #include <iostream>
-#include <map>
 
 #include "utils_data.h"
 #include "utils_fluids.h"
@@ -65,6 +64,7 @@ namespace ara {
                     unsigned int texture;
                     glGenTextures(1, &texture);
                     glBindTexture(GL_TEXTURE_2D, texture);
+                    // align the texture to the pixel grid
                     glTexImage2D(
                         GL_TEXTURE_2D,
                         0,
@@ -84,16 +84,19 @@ namespace ara {
                     // now store character for later use
                     Character character = {
                         texture, 
+                        (char)c,
                         glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
                         glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-                        face->glyph->advance.x
+                        static_cast<unsigned int>(face->glyph->advance.x)
                     };
                     characters.insert(std::pair<char, Character>(c, character));
                 }
+                glBindTexture(GL_TEXTURE_2D, 0);
+                
                 // convert the map to json
                 nlohmann::json j;
                 for (auto& c : characters) {
-                    j[c.first] = std::vector<int>{(int)c.second.TextureID, c.second.Size.x, c.second.Size.y, c.second.Bearing.x, c.second.Bearing.y, (int)c.second.Advance};
+                    j[c.first] = std::vector<int>{(int)c.second.TextureID, (int)c.second.Value, c.second.Size.x, c.second.Size.y, c.second.Bearing.x, c.second.Bearing.y, (int)c.second.Advance};
                 }
                 fontsD.mData[key] = j.dump();
                 
@@ -102,6 +105,31 @@ namespace ara {
             FT_Done_FreeType(ft);
 
             ARA_SET_CUSTOMER_DATA("fonts", fontsD);
+        }
+
+        std::map<char, Character> GetFntCharacters(std::string fontName) {
+            // get the font from the customer data
+            auto font = ARA_GET_CUSTOMER_DATA("fonts").mData[fontName];
+
+            // convert the json to map
+            nlohmann::json j;
+            j = nlohmann::json::parse(font);
+
+            std::map<char, Character> characters;
+            for (auto& c : j) {
+                char key = (char)(int)(c.at(1));
+
+                Character character = {
+                    (unsigned int)(int)(c.at(0)),
+                    key,
+                    glm::ivec2((int)(c.at(2)), (int)(c.at(3))),
+                    glm::ivec2((int)(c.at(4)), (int)(c.at(5))),
+                    (unsigned int)(c.at(6))
+                };
+                characters.insert(std::pair<char, Character>(key, character));
+            }
+
+            return characters;
         }
 
     } // conf

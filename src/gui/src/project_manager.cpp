@@ -59,7 +59,7 @@ ProjectManager::ProjectManager() {
             std::vector<ara::File> files = ara::GetFilesByExtension(path, ".ent");
             
             // Loop through all entities
-            for (auto& ent : scene.gEntities) {
+            for (auto& ent : scene.GetEntities()) {
                 std::string ent_path = path + "/" + ent->GetName() + ".ent";
 
                 // Remove ent_path from files

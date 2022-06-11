@@ -31,6 +31,10 @@ namespace ara {
 
             entity->Render(selected);
         }
+
+        for (auto& text : gTexts) {
+            text->Render();
+        }
     }
 
     void Scene::Update() {

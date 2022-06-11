@@ -84,6 +84,8 @@ namespace ara
         glfwSetWindowSizeCallback(mWindow, WindowResizeCallback);
 
         InitializeOpenGL();
+
+        glEnable(GL_CULL_FACE);
     }
 
     void Window::Update()

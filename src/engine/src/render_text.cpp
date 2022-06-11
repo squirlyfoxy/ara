@@ -80,26 +80,22 @@ namespace ara {
 
         float x = mPosition.x;
 
-        int maxDescent = 0;
         int maxAscent = 0;
 
         for (c = mText.begin(); c != mText.end(); c++) {
             auto character = font[*c];
 
             // Calculate max descent and ascent
-            if ((character.Size.x >> 6) - character.Bearing.y > maxDescent) {
-                maxDescent = (character.Size.x >> 6) - character.Bearing.y;
-            }
             if (character.Bearing.y > maxAscent) {
                 maxAscent = character.Bearing.y;
             }
 
             float xpos = x + character.Bearing.x * mSize;
-            float ypos = mPosition.y - (character.Size.y - character.Bearing.y) * mSize;
+            float ypos = (mPosition.y * mSize) - (character.Bearing.y * mSize) + (maxAscent * mSize);
             
             // width and height with descent and ascent
             float w = character.Size.x * mSize;
-            float h = ((maxAscent + maxDescent) * mSize);
+            float h = character.Size.y * mSize;
 
             float vertices[6][4] = {
                 { xpos,     ypos + h,   0.0f, 1.0f },            

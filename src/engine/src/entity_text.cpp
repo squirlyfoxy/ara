@@ -42,6 +42,14 @@ namespace ara {
         std::vector<const char*> font_sizes = {
             "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48"
         };
+        // selected_font_size is equal to the size of the text * 10000, this is because ImGui::Combo() works with ints
+        int to_find = mTextEntity->mSize * 10000;
+        for (int i = 0; i < font_sizes.size(); i++) {
+            if (atoi(font_sizes[i]) == to_find) {
+                selected_font_size = i;
+                break;
+            }
+        }
 
         ImGui::Text("Size");
         ImGui::SameLine();

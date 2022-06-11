@@ -135,6 +135,14 @@ namespace ara {
             return characters;
         }
 
+        std::vector<std::string> GetFnts() {
+            std::vector<std::string> fnts;
+            for (auto& f : ARA_GET_CUSTOMER_DATA("fonts").mData) {
+                fnts.push_back(f.first);
+            }
+            return fnts;
+        }
+
     } // conf
 
 }; // ara

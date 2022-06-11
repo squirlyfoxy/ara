@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "lib/json.hpp"
+#include "conf/conf_fnts.h"
 
 #include <imgui.h>
 #include <imgui_stdlib.h>
@@ -35,7 +36,7 @@ namespace ara {
 
         ImGui::Text("Text");
         ImGui::SameLine();
-        ImGui::InputText("Text", &mTextEntity->mText);
+        ImGui::InputText("##Text", &mTextEntity->mText);
 
         // Possible dimensions: 10, 12, 14, 16... to 48
         std::vector<const char*> font_sizes = {
@@ -45,6 +46,17 @@ namespace ara {
         ImGui::Text("Size");
         ImGui::SameLine();
         ImGui::Combo("##Size", &selected_font_size, font_sizes.data(), font_sizes.size());
+
+        auto fonts = ara::conf::GetFnts();
+        int selected_font = std::find(fonts.begin(), fonts.end(), mTextEntity->mFont) - fonts.begin();
+        ImGui::Text("Font");
+        ImGui::SameLine();
+        std::vector<const char*> font_names;
+        for (auto& font : fonts) {
+            font_names.push_back(font.c_str());
+        }
+        ImGui::Combo("##Font", &selected_font, font_names.data(), fonts.size());
+        mTextEntity->mFont = fonts[selected_font];
 
         mTextEntity->mSize = std::stof(font_sizes[selected_font_size]) / 10000.0f;
     }

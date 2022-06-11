@@ -28,6 +28,9 @@ namespace ara {
         // Get the characters of a font
         ARA_API std::map<char, Character> GetFntCharacters(std::string fontName);
 
+        // Get the loaded fonts
+        ARA_API std::vector<std::string> GetFnts();
+
     } // conf
 
 }; // ara

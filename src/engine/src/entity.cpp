@@ -11,6 +11,11 @@
 #include "entity_camera.h"
 #include "entity_square.h"
 #include "entity_empty.h"
+#include "entity_text.h"
+
+#include "lib/json.hpp"
+
+#include "utils_data.h"
 
 namespace ara {
 
@@ -29,6 +34,18 @@ namespace ara {
     }
 
     void Entity::SetName(const std::string& name) {
+        auto data = ARA_GET_CUSTOMER_DATA("entities").mData[mName];
+        nlohmann::json j = nlohmann::json::parse(data, nullptr, false);
+        if (j.find("name") != j.end()) {
+            j["name"] = name;
+            data = j.dump();
+
+            auto& entities = ARA_GET_CUSTOMER_DATA("entities");
+            entities.mData[name] = data;
+
+            ARA_SET_CUSTOMER_DATA("entities", entities);
+        }
+
         mName = name;
     }
 
@@ -63,7 +80,7 @@ namespace ara {
         ImGui::SameLine();
         std::string name = mName;
         ImGui::InputText("##Name", &name);
-        if (!name.empty()) {
+        if (!name.empty() && name != "") {
             // TODO: Check if name is unique, if not, error
 
             SetName(name);
@@ -119,6 +136,8 @@ namespace ara {
             entity = new EntitySquare();
         } else if (type == "EntityEmpty") {
             entity = new EntityEmpty();
+        } else if (type == "EntityText") {
+            entity = new EntityText();
         } else {
             // TODO: ERROR
 

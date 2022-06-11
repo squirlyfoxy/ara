@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-float gZoom = 1.0f;
+float gZoom = 500.0f;
 
 float posX = 0.0f;
 float posY = 0.0f;
@@ -21,7 +21,7 @@ bool cantMove = false;
 glm::mat4 GetEditorProjectionMatrix() {
     // 800x600
 
-    return glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+    return glm::ortho(-1.0f, 800.0f, -1.0f, 600.0f, -1.0f, 1.0f);
 }
 
 const glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -45,11 +45,11 @@ float GetCameraPositionY() {
     return posY;
 }
 
-static float velocity = 0.1f;
-static float zoom_velocity = 0.1f;
+static float velocity = 1.0f;
+static float zoom_velocity = 10.0f;
 
 void ZoomCamera(float delta) {
-    gZoom = glm::clamp(gZoom + delta * zoom_velocity, 0.1f, 10.0f);
+    gZoom = glm::clamp(gZoom + delta * zoom_velocity, 0.1f, 1000.0f);
 }
 
 void MoveCamera(float _posX, float _posY) {

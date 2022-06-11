@@ -8,6 +8,7 @@
 #include "entity_empty.h"
 #include "entity_square.h"
 #include "entity_camera.h"
+#include "entity_text.h"
 
 #include "project_manager.h"
 #include "utils_editor.h"
@@ -61,6 +62,9 @@ void gui_render_menu() {
                 }
                 if (ImGui::MenuItem("Square")) {
                     if (GetProjectManager()->GetCurrentProject() != nullptr) { GetProjectManager()->GetCurrentProject()->GetCurrentScene()->AddEntity(dynamic_cast<ara::Entity*>(new ara::EntitySquare())); }
+                }
+                if (ImGui::MenuItem("Text")) {
+                    if (GetProjectManager()->GetCurrentProject() != nullptr) { GetProjectManager()->GetCurrentProject()->GetCurrentScene()->AddEntity(dynamic_cast<ara::Entity*>(new ara::EntityText())); }
                 }
                 ImGui::EndMenu();
             }

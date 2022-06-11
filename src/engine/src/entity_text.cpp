@@ -1,0 +1,85 @@
+#include "entity_text.h"
+
+#include <iostream>
+
+#include "lib/json.hpp"
+
+#include <imgui.h>
+#include <imgui_stdlib.h>
+
+namespace ara {
+
+    EntityText::EntityText() {
+        mTextEntity = new Text("Hello Word", "", glm::vec2(0.0f, 0.0f), 0.01f, glm::vec3(1.0f, 1.0f, 1.0f));
+        mTextEntity->mFont = "arial";
+
+        mType = "EntityText";
+        mName = "Text";
+
+        // Edit modalities
+        mEditModalities = {
+            EntityEditModality::Color
+        };
+    }
+
+    void EntityText::Render(bool selected) {
+        mTextEntity->mPosition = mPosition;
+        mTextEntity->mColor = gColor;
+
+        mTextEntity->Render(true);
+    }
+
+    int selected_font_size = 0;
+    void EntityText::Edit() {
+        BasicEdit();
+
+        ImGui::Text("Text");
+        ImGui::SameLine();
+        ImGui::InputText("Text", &mTextEntity->mText);
+
+        // Possible dimensions: 10, 12, 14, 16... to 48
+        std::vector<const char*> font_sizes = {
+            "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48"
+        };
+
+        ImGui::Text("Size");
+        ImGui::SameLine();
+        ImGui::Combo("##Size", &selected_font_size, font_sizes.data(), font_sizes.size());
+
+        mTextEntity->mSize = std::stof(font_sizes[selected_font_size]) / 10000.0f;
+    }
+
+    void EntityText::SetText(const std::string& text) {
+        mTextEntity->SetText(text);
+    }
+
+    void EntityText::Save(std::ofstream& file) {
+        file << "text" << std::endl;
+
+        file << "{" << std::endl;
+        file << "    \"text\": \"" << mTextEntity->mText << "\"," << std::endl;
+        file << "    \"font\": \"" << mTextEntity->mFont << "\"," << std::endl;
+        file << "    \"size\": " << mTextEntity->mSize << std::endl;
+        file << "}" << std::endl;
+    }
+
+    void EntityText::CustomLoad(std::istringstream& file) {
+        nlohmann::json json;
+    
+        // Remove "text" line
+        std::string line;
+        std::getline(file, line);
+        if (line != "text") {
+            std::cout << "Error: Expected \"text\" line, got \"" << line << "\"" << std::endl;
+            exit(1);
+        }
+
+        file >> json;
+
+        mTextEntity->SetText(json["text"]);
+        mTextEntity->mFont = json["font"];
+        mTextEntity->mSize = json["size"];
+        mTextEntity->mColor = gColor;
+    }
+
+} // ara

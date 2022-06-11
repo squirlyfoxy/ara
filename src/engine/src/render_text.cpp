@@ -50,7 +50,7 @@ namespace ara {
         }
     }
 
-    void Text::Render() {
+    void Text::Render(bool is_entity) {
         if (sTextShader == nullptr) return;
 
         glEnable(GL_BLEND);
@@ -58,7 +58,20 @@ namespace ara {
 
         sTextShader->Use();
         sTextShader->SetVec3("textColor", mColor);
-        sTextShader->SetMat4("projection", glm::ortho(-1.0f, 800.0f, -1.0f, 600.0f, -1.0f, 1.0f));
+        sTextShader->SetMat4("projection", GetProjection());
+        
+        if (is_entity) {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(mPosition.x, mPosition.y, 0.0f));
+            sTextShader->SetMat4("model", model);
+            
+            glm::mat4 view = GetView();
+            sTextShader->SetMat4("view", view);
+        } else {
+            sTextShader->SetMat4("model", glm::mat4(1.0f));
+            sTextShader->SetMat4("view", glm::mat4(1.0f));
+        }
+
         glActiveTexture(GL_TEXTURE0);
         glBindVertexArray(mVAO);
 
@@ -86,7 +99,7 @@ namespace ara {
             
             // width and height with descent and ascent
             float w = character.Size.x * mSize;
-            float h = (maxAscent + maxDescent) * mSize;
+            float h = ((maxAscent + maxDescent) * mSize);
 
             float vertices[6][4] = {
                 { xpos,     ypos + h,   0.0f, 1.0f },            

@@ -9,6 +9,6 @@ echo "2. Building the server for web build"
 cd ../src/engine/jsbuild
 sh build.sh
 
-cd ../../../../bin
+cd ../../../bin
 echo ""
 ./gui

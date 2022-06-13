@@ -2,6 +2,9 @@ build
 bin/gui
 bin/*.so
 bin/imgui.ini
+bin/wbuild/*
+bin/wbuild/*/*
+bin/wbuild/*/*/*
 bin/projects/*/*.ara
 bin/projects/*/*/*.sara
 bin/projects/*/*/*.ent

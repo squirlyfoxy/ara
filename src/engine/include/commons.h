@@ -15,6 +15,14 @@
 
 #define ARA_INCLUDE_OS \ #include <TargetConditionals.h>
 
+// If emscripten is used, then we need to export the symbols or import them
+#elif EMSCRIPTEN
+#include "emscripten/emscripten.h"
+
+#define ARA_API EMSCRIPTEN_KEEPALIVE
+
+#define ARA_INCLUDE_OS
+
 #else
 // Linux or MacOS
 #define ARA_API

@@ -2,7 +2,6 @@
 
 #include "utils_transforms.h"
 #include "utils_editor.h"
-#include "gui_scene_editor.h"
 #include "shader.h"
 
 #include <glm/glm.hpp>

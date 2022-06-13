@@ -12,7 +12,11 @@ include_directories(../lib/glm)
 include_directories(../lib/toml11)
 
 # freetype
-include_directories(../lib/freetype/include)
+if(EMSCRIPTEN)
+    include_directories(../lib/freetype-emscripten/include)
+else()
+    include_directories(../lib/freetype/include)
+endif()
 
 # include imgui
 include_directories(../gui/lib/imgui)
@@ -35,7 +39,12 @@ file(GLOB_RECURSE SRCS
 set(CMAKE_CXX_STANDARD 20)
 
 # will build as a dynamic library
-add_library(engine SHARED ${SRCS})
+# if not emscripten, then it will build as a static library
+if(EMSCRIPTEN)
+    add_library(engine STATIC ${SRCS})
+else()
+    add_library(engine SHARED ${SRCS})
+endif()
 
 # link against:
 target_link_libraries(engine glad glfw freetype)

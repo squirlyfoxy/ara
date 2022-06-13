@@ -18,18 +18,35 @@ configure_file(
 )
 
 # binary output directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
-set(BUILD_SHARED_LIBS ON)
+if(EMSCRIPTEN)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin/wbuild")
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin/wbuild")
+
+    set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}../tools/emscripten/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
+else()
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
+    set(BUILD_SHARED_LIBS ON)
+endif()
 
 # add subdirectories (engine, gui)
 add_subdirectory(engine)
-add_subdirectory(gui)
+if(EMSCRIPTEN)
+else()
+    add_subdirectory(gui)
+endif()
 
 # libraries
-add_subdirectory(lib/glfw)
+if(EMSCRIPTEN)
+else()
+    add_subdirectory(lib/glfw)
+endif()
+
 add_subdirectory(lib/glad)
+
+set(SQLITECPP_RUN_CPPLINT OFF)
 add_subdirectory(lib/SQLiteCpp)
+
 add_subdirectory(lib/freetype)
 
 # include global libraries

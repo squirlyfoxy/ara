@@ -5,6 +5,7 @@ bin/imgui.ini
 bin/wbuild/*
 bin/wbuild/*/*
 bin/wbuild/*/*/*
+bin/deploy/*
 bin/projects/*/*.ara
 bin/projects/*/*/*.sara
 bin/projects/*/*/*.ent

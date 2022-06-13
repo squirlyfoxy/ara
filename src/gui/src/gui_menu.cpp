@@ -73,6 +73,19 @@ void gui_render_menu() {
 
             ImGui::EndMenu();
         }
+        if (ImGui::BeginMenu("Build")) {
+            if (ImGui::MenuItem("Web")) {
+                if (GetProjectManager()->GetCurrentProject() != nullptr) {
+                    system(("python scripts/prepare_web_environment.py " + GetProjectManager()->GetCurrentProject()->GetName()).c_str());
+
+                    // TODO: Build Web
+
+                    // Start web server
+                }
+            }
+
+            ImGui::EndMenu();
+        }
         if (ImGui::BeginMenu("Help")) {
             if (ImGui::MenuItem("About")) { 
                 ara::gui::SimpleMessageBox("About", "Ara 2D Game Engine\n\nVersion: " + std::to_string(ara_VERSION_MAJOR) + "." + std::to_string(ara_VERSION_MINOR)  + "\nCreated by: @sqirlyfoxy\n\nCopyright (c) 2022 7Software. All rights reserved.");

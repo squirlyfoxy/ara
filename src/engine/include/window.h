@@ -2,6 +2,8 @@
 
 #include "commons.h"
 
+#ifndef ARA_WEB
+
 #include <string>
 #include <vector>
 #include <functional>
@@ -89,3 +91,5 @@ namespace ara
         // Glfw window resize callback
         static void WindowResizeCallback(GLFWwindow* window, int width, int height);    };
 } // ara
+
+#endif

@@ -19,8 +19,9 @@
 #elif EMSCRIPTEN
 #include "emscripten/emscripten.h"
 
-#define ARA_API EMSCRIPTEN_KEEPALIVE
-
+#define ARA_API
+#define ARA_API_EXPORT EMSCRIPTEN_KEEPALIVE
+#define ARA_WEB
 #define ARA_INCLUDE_OS
 
 #else

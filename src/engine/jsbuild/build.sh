@@ -1,6 +1,6 @@
 # build into the bin directory
 cd server
-rm -r ../../../../bin/wbuild
+#rm -r ../../../../bin/wbuild
 go build -o ../../../../bin/wbuild/server
 cd ..
 

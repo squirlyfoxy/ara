@@ -2,6 +2,8 @@
 
 #include "window.h"
 
+#ifndef ARA_WEB
+
 #include "gl_globals.h"
 
 #include "conf/conf_fnts.h"
@@ -207,3 +209,5 @@ namespace ara
     }
 
 } // ara
+
+#endif

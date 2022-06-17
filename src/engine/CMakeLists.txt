@@ -12,11 +12,7 @@ include_directories(../lib/glm)
 include_directories(../lib/toml11)
 
 # freetype
-if(EMSCRIPTEN)
-    include_directories(../lib/freetype-emscripten/include)
-else()
-    include_directories(../lib/freetype/include)
-endif()
+include_directories(../lib/freetype/include)
 
 # include imgui
 include_directories(../gui/lib/imgui)
@@ -42,9 +38,13 @@ set(CMAKE_CXX_STANDARD 20)
 # if not emscripten, then it will build as a static library
 if(EMSCRIPTEN)
     add_library(engine STATIC ${SRCS})
+    set_target_properties(engine PROPERTIES LINK_FLAGS "s WASM=1")
+
+    # link against:
+    target_link_libraries(engine glad freetype)
 else()
     add_library(engine SHARED ${SRCS})
-endif()
 
-# link against:
-target_link_libraries(engine glad glfw freetype)
+    # link against:
+    target_link_libraries(engine glad glfw freetype)
+endif()

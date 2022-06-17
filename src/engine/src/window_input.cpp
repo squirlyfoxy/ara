@@ -1,5 +1,7 @@
 #include "window_input.h"
 
+#ifndef ARA_WEB
+
 #include <iostream>
 
 #include <glm/glm.hpp>
@@ -124,3 +126,5 @@ namespace ara {
     }
 
 }
+
+#endif

@@ -1,8 +1,11 @@
 #pragma once
 
+#include "commons.h"
+
+#ifndef ARA_WEB
+
 #define NO_GL
 #include <GLFW/glfw3.h>
-#include "commons.h"
 
 #define MAX_KEYS    1024
 #define MAX_BUTTONS 32
@@ -42,3 +45,5 @@ namespace ara {
 
     };
 } // ara
+
+#endif

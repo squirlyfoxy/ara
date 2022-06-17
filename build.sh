@@ -12,12 +12,17 @@ echo "   -> Preparing the WASM build"
 cd tools/emscripten
 source ./emsdk_env.sh
 cd ../..
+
 mkdir build_wasm
 cd build_wasm
-emcmake cmake ../src/
+emcmake cmake ../src/ -DWEB_B=1
 echo "   -> Building.."
-emmake make
+make
+
+cd ..
 
 echo "2. Building the server for web build"
-cd ../src/engine/jsbuild
+cd ./src/engine/jsbuild
 sh build.sh
+
+echo "OK"

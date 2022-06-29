@@ -18,4 +18,5 @@ except FileExistsError:
 
 # copy files from wbuild folder to deploy/web folder (subdirectories too)
 shutil.copytree("wbuild", "deploy/" + project_name + "/web")
+shutil.copytree("web/shaders", "deploy/" + project_name + "/web/shaders")
 

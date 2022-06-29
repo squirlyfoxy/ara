@@ -42,24 +42,29 @@ namespace ara {
         }
 
         void SimpleMessageBox(const std::string& title, const std::string& message) {
+        #ifndef ARA_WEB
             #ifdef _WIN32
                 MessageBoxA(NULL, message.c_str(), title.c_str(), MB_OK);
             #else
                 // Need zenity to be installed
                 system(("zenity --info --title=\"" + title + "\" --text=\"" + message + "\"").c_str());
             #endif
+        #endif
         }
 
         void ErrorMessageBox(const std::string& title, const std::string& message) {
+        #ifndef ARA_WEB
             #ifdef _WIN32
                 MessageBoxA(NULL, message.c_str(), title.c_str(), MB_OK | MB_ICONERROR);
             #else
                 // Need zenity to be installed
                 system(("zenity --error --title=\"" + title + "\" --text=\"" + message + "\"").c_str());
             #endif
+        #endif
         }
 
         bool SimpleYesNoBox(const std::string& title, const std::string& message) {
+        #ifndef ARA_WEB
             #ifdef _WIN32
                 return MessageBoxA(NULL, message.c_str(), title.c_str(), MB_YESNO) == IDYES;
             #else
@@ -77,6 +82,9 @@ namespace ara {
                 return output.starts_with("y");
                 
             #endif
+        #else
+            return true;
+        #endif
         }
 
     } // gui

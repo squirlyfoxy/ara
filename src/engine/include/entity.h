@@ -35,10 +35,12 @@ namespace ara {
         const glm::vec2& GetPosition() const;
         const unsigned int GetUid() const;
         const std::string& GetType() const;
+        const glm::vec2& GetSize() const;
 
         // Setters
         void SetName(const std::string& name);
         void SetPosition(const glm::vec2& position);
+        void SetSize(const glm::vec2& size);
 
         glm::vec3 gColor;
 
@@ -49,6 +51,7 @@ namespace ara {
     protected:
         std::string mName;
         glm::vec2 mPosition;
+        glm::vec2 mSize = glm::vec2(1.0f, 1.0f);
 
         std::vector<EntityEditModality> mEditModalities;
 

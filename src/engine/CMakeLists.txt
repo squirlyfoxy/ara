@@ -36,15 +36,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 # will build as a dynamic library
 # if not emscripten, then it will build as a static library
-if(EMSCRIPTEN)
-    add_library(engine STATIC ${SRCS})
-    set_target_properties(engine PROPERTIES LINK_FLAGS "s WASM=1")
+add_library(engine SHARED ${SRCS})
 
-    # link against:
-    target_link_libraries(engine glad freetype)
-else()
-    add_library(engine SHARED ${SRCS})
-
-    # link against:
-    target_link_libraries(engine glad glfw freetype)
-endif()
+# link against:
+target_link_libraries(engine glad glfw freetype)

@@ -13,7 +13,9 @@
 
 #include "entity_camera.h"
 
+#ifndef ARA_WEB
 namespace fs = std::filesystem;
+#endif
 
 namespace ara {
 
@@ -148,6 +150,7 @@ namespace ara {
 
 
     void Project::Save(std::ofstream *fs, Project& project) {
+        #ifndef ARA_WEB
         // STRUCTURE FO THE FILE
         //
 
@@ -176,6 +179,7 @@ namespace ara {
             fs->write(project.gScenes[i].GetName().c_str(), project.gScenes[i].GetName().size());
             fs->write("\n", 1);
         }
+        #endif
     }
 
     Project Project::ReadProject(const std::string& path) {

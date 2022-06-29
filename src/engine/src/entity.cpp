@@ -61,6 +61,14 @@ namespace ara {
         return mPosition;
     }
 
+    void Entity::SetSize(const glm::vec2& size) {
+        mSize = size;
+    }
+
+    const glm::vec2& Entity::GetSize() const {
+        return mSize;
+    }
+
     const unsigned int Entity::GetUid() const {
         return mUid;
     }
@@ -70,11 +78,6 @@ namespace ara {
     }
 
     void Entity::BasicEdit() {
-        // Position
-        ImGui::Text("Position");
-        ImGui::SameLine();
-        ImGui::InputFloat2("##Position", glm::value_ptr(mPosition));
-
         // Name
         ImGui::Text("Name");
         ImGui::SameLine();
@@ -85,6 +88,16 @@ namespace ara {
 
             SetName(name);
         }
+
+        // Position
+        ImGui::Text("Position");
+        ImGui::SameLine();
+        ImGui::InputFloat2("##Position", glm::value_ptr(mPosition));
+
+        // Size
+        ImGui::Text("Size");
+        ImGui::SameLine();
+        ImGui::InputFloat2("##Size", glm::value_ptr(mSize));
 
         ImGui::Separator();
         ImGui::Text("Entity Specifics");
@@ -109,6 +122,9 @@ namespace ara {
         // Write the color
         file.write((std::to_string(entity.gColor.x) + " " + std::to_string(entity.gColor.y) + " " + std::to_string(entity.gColor.z) + "\n").c_str(), (std::to_string(entity.gColor.x) + " " + std::to_string(entity.gColor.y) + " " + std::to_string(entity.gColor.z) + "\n").size());
     
+        // Write the size
+        file.write((std::to_string(entity.GetSize().x) + " " + std::to_string(entity.GetSize().y) + "\n").c_str(), (std::to_string(entity.GetSize().x) + " " + std::to_string(entity.GetSize().y) + "\n").size());
+
         entity.Save(file);
     }
 
@@ -122,12 +138,17 @@ namespace ara {
         std::string type = type_name.substr(0, type_name.find("|"));
         std::string name = type_name.substr(type_name.find("|") + 1);
 
+        // position
         std::getline(file, entity_line);
         std::string position = entity_line;
 
         // color
         std::getline(file, entity_line);
         std::string color = entity_line;
+
+        // size
+        std::getline(file, entity_line);
+        std::string size = entity_line;
 
         // Create the entity
         if (type == "EntityCamera") {
@@ -148,11 +169,17 @@ namespace ara {
 
         // Set the position
         entity->SetPosition(glm::vec2(std::stof(position.substr(0, position.find(" "))), std::stof(position.substr(position.find(" ") + 1))));
+        
         // Set the color
         float x = std::stof(color.substr(0, color.find(" ")));
         float y = std::stof(color.substr(color.find(" ") + 1, color.find(" ")));
         float z = std::stof(color.substr(color.find(" ") + 1));
         entity->gColor = glm::vec3(x, y, z);
+
+        // Set the size
+        x = std::stof(size.substr(0, size.find(" ")));
+        y = std::stof(size.substr(size.find(" ") + 1));
+        entity->SetSize(glm::vec2(x, y));
 
         // Custom deserialization
         entity->CustomLoad(file);

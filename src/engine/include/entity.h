@@ -43,6 +43,7 @@ namespace ara {
         void SetSize(const glm::vec2& size);
 
         glm::vec3 gColor;
+        bool canBeSelected = false;
 
         // Static methods
         static void     Save(std::ofstream& file, Entity& entity);

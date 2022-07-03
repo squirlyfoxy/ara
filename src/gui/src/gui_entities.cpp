@@ -22,6 +22,15 @@ void ImWindowEntities::Draw() {
             ImGui::BeginChild("Entities", ImVec2(0, 0), true);
             std::vector<ara::Entity*> entities = GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities();
                 for (int i = 0; i < entities.size(); i++) {
+                    nlohmann::json j = nlohmann::json::parse(ARA_GET_CUSTOMER_DATA("entities").mData[entities[i]->GetName()]);
+                    if (j["if_selected"]) {
+                        selected_entity = entities[i];
+                        gui_edit_entity_open = true;
+                    } else {
+                        selected_entity = nullptr;
+                        gui_edit_entity_open = false;
+                    }
+
                     if (ImGui::TreeNode(entities[i]->GetName().c_str())) {
                         // Buttons in a row (Edit and Delete)
 

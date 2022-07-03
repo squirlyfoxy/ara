@@ -19,15 +19,18 @@
 
 namespace ara {
 
+    static unsigned int sEntityCount = 0;
+
     Entity::Entity() {
         // DEFAULT CONSTRUCTOR, DO NOT USE
+
+        mUid = sEntityCount++;
     }
 
     Entity::Entity(const std::string& name, const glm::vec2& position) {
         mName = name;
         mPosition = position;
-
-        // TODO: UID
+        mUid = sEntityCount++;
     }
 
     Entity::~Entity() {

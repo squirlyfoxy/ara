@@ -88,6 +88,7 @@ namespace ara
         InitializeOpenGL();
 
         glEnable(GL_CULL_FACE);
+        glClampColor(GL_CLAMP_READ_COLOR, GL_FIXED_ONLY);
     }
 
     void Window::Update()
@@ -95,14 +96,16 @@ namespace ara
         // Update input
         if (mInputManager->CanUpdate())
         {
-            // Call the mouse button callbacks
-            for (auto& callback : mMouseButtonEvents)
+            // Call the key callbacks
+            for (auto& callback : mKeyEvents)
             {
                 callback(mInputManager);
             }
+        }
 
-            // Call the key callbacks
-            for (auto& callback : mKeyEvents)
+        if (mInputManager->CanUpdateButton()) {
+            // Call the button callbacks
+            for (auto& callback : mMouseButtonEvents)
             {
                 callback(mInputManager);
             }

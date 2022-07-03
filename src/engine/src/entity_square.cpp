@@ -38,6 +38,7 @@ namespace ara {
         Init();
 
         gColor = glm::vec3(1.0f, 1.0f, 1.0f);
+        canBeSelected = true;
 
         // Edit modalities
         mEditModalities = {
@@ -57,6 +58,7 @@ namespace ara {
         shader->SetMat4("view", GetView());
         shader->SetMat4("proj", GetProjection());
         shader->SetMat4("model", model);
+        shader->SetInt("u_uid", (int)GetUid());
 
         shader->SetVec3("u_color", gColor);
 

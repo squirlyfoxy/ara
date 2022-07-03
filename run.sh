@@ -8,7 +8,7 @@ if [ "$1" = "-gui" ]; then
     cd bin
     ./gui
 elif [ "$1" = "-server" ]; then
-    cd bin/deploy/$2/web
+    cd bin/deploy/$2/
     ./server
 else
     echo "Usage: run.sh [-gui] [-server [name of the project]]"

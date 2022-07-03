@@ -7,6 +7,7 @@ uniform float u_scale;
 uniform float u_resolution;
 
 out vec4 FragColor;
+out int FragColorInt;
 
 // adapted from https://thebookofshaders.com/edit.php#10/ikeda-simple-grid.frag
  
@@ -21,4 +22,5 @@ void main()
     vec2 st = gl_FragCoord.xy / u_resolution;
     float grid_value = grid(st, u_scale);
     FragColor = vec4(u_color, grid_value);
+    FragColorInt = -1;
 }

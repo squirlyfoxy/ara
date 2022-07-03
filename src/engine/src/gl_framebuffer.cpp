@@ -1,14 +1,24 @@
 #include "gl_framebuffer.h"
 
-#include <iostream>
+#include <assert.h>
 
 #include <glad/glad.h>
 
 namespace ara {
 
-    Framebuffer::Framebuffer(int width, int height) {
+// OPTIONS FOR THE BINDED TEXTURE
+#define ARA_FRAMEBUFFER_TEXTURE_OPTIONS glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); \
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); \
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); \
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); \
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    Framebuffer::Framebuffer(int width, int height, std::vector<FramebufferTexture> textures) {
         mWidth = width;
         mHeight = height;
+        mTextures = textures;
+
+        mTexturesID = new unsigned int[mTextures.size()];
 
         Init();
     }
@@ -16,11 +26,21 @@ namespace ara {
     Framebuffer::~Framebuffer() {
         glDeleteFramebuffers(1, &mFBO);
         glDeleteRenderbuffers(1, &mRBO);
-        glDeleteTextures(1, &mTexture);
+        glDeleteTextures(mTextures.size(), mTexturesID);
     }
 
-    unsigned int Framebuffer::GetTexture() const {
-        return mTexture;
+    unsigned int Framebuffer::GetTexture(int index) const {
+        assert(index >= 0 && index < mTextures.size());
+        return mTexturesID[index];
+    }
+
+    int Framebuffer::ReadPixel(uint32_t attachment, int x, int y) const {
+        assert(attachment < mTextures.size());
+        int pData;
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+        glReadPixels(x, y, 1, 1, (int)mTextures[attachment].format, (int)mTextures[attachment].type, &pData);
+
+        return pData;
     }
 
     void Framebuffer::Bind() const {
@@ -37,23 +57,32 @@ namespace ara {
 
         glDeleteFramebuffers(1, &mFBO);
         glDeleteRenderbuffers(1, &mRBO);
-        glDeleteTextures(1, &mTexture);
+        glDeleteTextures(mTextures.size(), mTexturesID);
 
         Init();
     }
 
     void Framebuffer::Init() {
         // Create framebuffer
-        glGenFramebuffers(1, &mFBO);
+        glCreateFramebuffers(1, &mFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 
-        // Create texture
-        glGenTextures(1, &mTexture);
-        glBindTexture(GL_TEXTURE_2D, mTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+        // Create textures
+        glCreateTextures(GL_TEXTURE_2D, mTextures.size(), mTexturesID);
+        for (int i = 0; i < mTextures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, mTexturesID[i]);
+            glTexImage2D(GL_TEXTURE_2D, 0, (int)mTextures[i].internalFormat, mWidth, mHeight, 0, (int)mTextures[i].format, (int)mTextures[i].type, NULL);
+            ARA_FRAMEBUFFER_TEXTURE_OPTIONS
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, mTexturesID[i], 0);
+        }
+
+        // Prepare render targets
+        GLenum DrawBuffers[mTextures.size()];
+        for (int i = 0; i < mTextures.size(); i++) {
+            DrawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
+        }
+        glDrawBuffers(mTextures.size(), DrawBuffers);
     
         // Create renderbuffer
         glGenRenderbuffers(1, &mRBO);
@@ -67,7 +96,7 @@ namespace ara {
 
             glDeleteFramebuffers(1, &mFBO);
             glDeleteRenderbuffers(1, &mRBO);
-            glDeleteTextures(1, &mTexture);
+            glDeleteTextures(mTextures.size(), mTexturesID);
         }
 
         // Unbind framebuffer

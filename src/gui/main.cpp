@@ -26,7 +26,7 @@ int main() {
     std::cout << "Starting ARA version: " << ara_VERSION_MAJOR << "." << ara_VERSION_MINOR << "..." << std::endl;
 
     // Create a window
-    ara::Window window(1024, 768, "ARA");
+    ara::Window window(1920, 1080, "ARA");
     initialize_scene_editor();
 
     // Initialize the ImGui context
@@ -87,6 +87,9 @@ int main() {
     // Editor callbacks
     window.AddKeyEvent(CameraMovedCallback);
     window.AddMouseScrollEvent(CameraScrollCallback);
+
+    // Scene editor
+    //window.AddMouseButtonEvent(SceneEditorMousePicking);
 
     window.Run();
 

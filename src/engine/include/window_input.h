@@ -31,6 +31,7 @@ namespace ara {
 
         bool CanUpdate();
         bool CanScrollUpdate();
+        bool CanUpdateButton();
         void SetCanUpdate(bool canUpdate);
 
     private:

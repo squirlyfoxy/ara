@@ -20,33 +20,16 @@ configure_file(
 # add subdirectories (engine, gui)
 
 # binary output directory
-if(DEFINED WEB_B)
-
-    set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../tools/emscripten/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
-
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin/wbuild")
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin/wbuild")
-
-    set(CMAKE_EXECUTABLE_SUFFIX ".wasm")
-    set(CMAKE_SHARED_LIBRARY_SUFFIX ".wasm")
-else()
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
-endif()
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/../bin")
 
 set(BUILD_SHARED_LIBS ON)
 
 add_subdirectory(engine)
-if(DEFINED WEB_B)
-else()
-    add_subdirectory(gui)
-endif()
+add_subdirectory(gui)
 
 # libraries
-if(DEFINED WEB_B)
-else()
-    add_subdirectory(lib/glfw)
-endif()
+add_subdirectory(lib/glfw)
 
 add_subdirectory(lib/glad)
 
@@ -55,15 +38,8 @@ add_subdirectory(lib/SQLiteCpp)
 add_subdirectory(lib/freetype)
 
 # include global libraries
-if(DEFINED WEB_B)
-    include_directories(
-        "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
-    )
-else()
-    include_directories(
-        "${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
-    )
-endif()
+include_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glm"
+)

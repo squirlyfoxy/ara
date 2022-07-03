@@ -50,14 +50,14 @@ namespace ara
         // Clear color
         glm::vec3 gClearColor;
 
+        // Input
+        InputManager *mInputManager;
+
     private:
         int mWidth, mHeight;
         std::string mTitle;
 
         GLFWwindow* mWindow;
-
-        // Input
-        InputManager *mInputManager;
 
         // Methods
 

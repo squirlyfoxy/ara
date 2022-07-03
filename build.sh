@@ -13,13 +13,11 @@ cd tools/emscripten
 source ./emsdk_env.sh
 cd ../..
 
-mkdir build_wasm
-cd build_wasm
-emcmake cmake ../src/ -DWEB_B=1
-echo "   -> Building.."
-make
+#cd build_wasm
+#echo "   -> Building.."
+#make
 
-cd ..
+#cd ..
 
 echo "2. Building the server for web build"
 cd ./src/engine/jsbuild

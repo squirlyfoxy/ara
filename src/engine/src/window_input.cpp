@@ -10,11 +10,12 @@ namespace ara {
 
     static bool gKeys[MAX_KEYS];
     static bool gMouseButtons[MAX_BUTTONS];
-    static double gMouseX, gMouseY;
-    static double gScrollX, gScrollY;
+    static double gMouseX = 0, gMouseY = 0;
+    static double gScrollX = 0, gScrollY = 0;
 
     static bool gCanUpdate = false;
     static bool gCanScrollUpdate = false;
+    static bool gCanUpdateButton = false;
     static int gUpdatesSinceMouse = 0;
 
     // **********************************
@@ -87,6 +88,11 @@ namespace ara {
         return gCanScrollUpdate;
     }
 
+    bool InputManager::CanUpdateButton()
+    {
+        return gCanUpdateButton;
+    }
+
     void InputManager::SetCanUpdate(bool canUpdate)
     {
         gCanUpdate = canUpdate;
@@ -103,8 +109,8 @@ namespace ara {
 
     void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
     {
-        if (action == GLFW_RELEASE) gCanUpdate = false;
-        else gCanUpdate = true;
+        if (action == GLFW_RELEASE) gCanUpdateButton = false;
+        else gCanUpdateButton = true;
 
         gMouseButtons[button] = action != GLFW_RELEASE;
     }

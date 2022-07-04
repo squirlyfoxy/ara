@@ -15,7 +15,7 @@ ImWindowNewProject::~ImWindowNewProject() {
 void ImWindowNewProject::Draw() {
     if (!IsOpen()) return;
 
-    ImGui::Begin("New Project", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("New Project", &open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
         ImGui::Text("Create a new project");
         ImGui::Separator();
         ImGui::InputText("Project Name", &gui_new_project_project_name);

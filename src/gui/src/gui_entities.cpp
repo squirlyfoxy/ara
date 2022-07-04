@@ -1,5 +1,7 @@
 #include "gui_entities.h"
 
+#include <iostream>
+
 #include "project_manager.h"
 
 #include "imgui.h"
@@ -21,18 +23,25 @@ void ImWindowEntities::Draw() {
             // List the entity in a tree
             ImGui::BeginChild("Entities", ImVec2(0, 0), true);
             std::vector<ara::Entity*> entities = GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities();
+                bool selected = false;
+                
                 for (int i = 0; i < entities.size(); i++) {
                     nlohmann::json j = nlohmann::json::parse(ARA_GET_CUSTOMER_DATA("entities").mData[entities[i]->GetName()]);
-                    if (j["if_selected"]) {
+                    if (j["if_selected"] && !selected_from_tree) {
                         selected_entity = entities[i];
-                        gui_edit_entity_open = true;
-                    } else {
-                        selected_entity = nullptr;
-                        gui_edit_entity_open = false;
                     }
+                    selected = j["if_selected"];
+
+                    // Treenode that opens automatically when the entity is selected
+                    if (selected_entity == entities[i] && selected)
+                        ImGui::SetNextItemOpen(true);
+                    else // only one selected entity at a time
+                        ImGui::SetNextItemOpen(false);
 
                     if (ImGui::TreeNode(entities[i]->GetName().c_str())) {
                         // Buttons in a row (Edit and Delete)
+                        selected_entity = entities[i];
+                        selected_from_tree = true;
 
                         if (ImGui::Button("Edit")) {
                             // Edit the entity
@@ -43,23 +52,27 @@ void ImWindowEntities::Draw() {
                             // TODO: Delete the entity
                         }
 
-                        selected_entity = entities[i];
-
                         // get data and set it
-                        for (auto& entity : entities) {
-                            nlohmann::json j = nlohmann::json::parse(ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()]);
-                            j["if_selected"] = entity->GetName() == selected_entity->GetName();
-                            ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()] = j.dump();
-                        }
+                        j["if_selected"] = entities[i]->GetName() == selected_entity->GetName();
+                        ARA_GET_CUSTOMER_DATA("entities").mData[entities[i]->GetName()] = j.dump();
 
                         ImGui::TreePop();
                     }
+                }
+
+                if (!selected) {
+                    gui_edit_entity_open = false;
                 }
             ImGui::EndChild();
         }
     ImGui::End();
 
-    if (gui_edit_entity_open) edit_entity(); else selected_entity = nullptr;
+    if (gui_edit_entity_open)
+        edit_entity(); 
+    else { // Reset
+        selected_from_tree = false;
+        selected_entity = nullptr;
+    }
 }
 
 void ImWindowEntities::edit_entity() {

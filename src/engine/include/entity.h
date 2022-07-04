@@ -73,6 +73,9 @@ namespace ara {
 
     private:
         unsigned int mUid;
+
+        // Errors
+        bool mAlreadyOnNameError = false;
     };
 
 

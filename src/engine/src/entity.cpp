@@ -13,6 +13,8 @@
 #include "entity_empty.h"
 #include "entity_text.h"
 
+#include "gui/gui.h"
+
 #include "lib/json.hpp"
 
 #include "utils_data.h"
@@ -37,13 +39,25 @@ namespace ara {
     }
 
     void Entity::SetName(const std::string& name) {
-        auto data = ARA_GET_CUSTOMER_DATA("entities").mData[mName];
+        auto entities = ARA_GET_CUSTOMER_DATA("entities");
+
+        // Check if name is unique; if not, error
+        for (auto& entity : entities.mData) {
+            if (entity.first == name && !mAlreadyOnNameError) {
+                mAlreadyOnNameError = true;
+                    
+                ara::gui::ErrorMessageBox("Error", "An entity with this name already exists");
+
+                return;
+            }
+        }
+
+        auto data = entities.mData[mName];
         nlohmann::json j = nlohmann::json::parse(data, nullptr, false);
         if (j.find("name") != j.end()) {
             j["name"] = name;
             data = j.dump();
 
-            auto& entities = ARA_GET_CUSTOMER_DATA("entities");
             entities.mData[name] = data;
 
             ARA_SET_CUSTOMER_DATA("entities", entities);
@@ -81,14 +95,13 @@ namespace ara {
     }
 
     void Entity::BasicEdit() {
+        std::string name = mName;
+        
         // Name
         ImGui::Text("Name");
         ImGui::SameLine();
-        std::string name = mName;
         ImGui::InputText("##Name", &name);
-        if (!name.empty() && name != "") {
-            // TODO: Check if name is unique, if not, error
-
+        if (!name.empty() && name != mName) {
             SetName(name);
         }
 

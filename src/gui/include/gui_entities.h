@@ -11,6 +11,7 @@ public:
 
 private:
     bool gui_edit_entity_open = false;
+    bool selected_from_tree = false;
     ara::Entity* selected_entity;
 
     void edit_entity();

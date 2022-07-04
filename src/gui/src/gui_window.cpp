@@ -2,7 +2,7 @@
 
 ImWindow::ImWindow(std::string name) {
     this->name = name;
-    this->open = true;
+    this->open = false;
 }
 
 ImWindow::~ImWindow() {

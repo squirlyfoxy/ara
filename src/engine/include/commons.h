@@ -37,3 +37,8 @@
 
 #define ARA_GLAD_ERROR_EXIT_CODE -1
 #define ARA_GL_SHADER_COMPILATION_ERROR -2
+
+// ******************************
+// Macros
+
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))

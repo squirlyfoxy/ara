@@ -13,7 +13,8 @@ namespace ara {
 
     enum class EntityEditModality {
         Color,
-        Texture
+        Texture, // Only one texture
+        Textures // Multiple textures
     };
 
     class ARA_API Entity {

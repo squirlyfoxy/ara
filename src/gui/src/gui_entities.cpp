@@ -22,18 +22,15 @@ void ImWindowEntities::Draw() {
         } else {
             // List the entity in a tree
             ImGui::BeginChild("Entities", ImVec2(0, 0), true);
-            std::vector<ara::Entity*> entities = GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities();
-                bool selected = false;
-                
+            std::vector<ara::Entity*> entities = GetProjectManager()->GetCurrentProject()->GetCurrentScene()->GetEntities();              
                 for (int i = 0; i < entities.size(); i++) {
                     nlohmann::json j = nlohmann::json::parse(ARA_GET_CUSTOMER_DATA("entities").mData[entities[i]->GetName()]);
                     if (j["if_selected"] && !selected_from_tree) {
                         selected_entity = entities[i];
                     }
-                    selected = j["if_selected"];
 
                     // Treenode that opens automatically when the entity is selected
-                    if (selected_entity == entities[i] && selected)
+                    if (selected_entity == entities[i])
                         ImGui::SetNextItemOpen(true);
                     else // only one selected entity at a time
                         ImGui::SetNextItemOpen(false);
@@ -58,10 +55,6 @@ void ImWindowEntities::Draw() {
 
                         ImGui::TreePop();
                     }
-                }
-
-                if (!selected) {
-                    gui_edit_entity_open = false;
                 }
             ImGui::EndChild();
         }

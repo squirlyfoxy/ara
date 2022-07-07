@@ -3,10 +3,10 @@
 #include "project_manager.h"
 
 #include "imgui.h"
+#include "imgui_stdlib.h"
 
 ImWindowNewProject::ImWindowNewProject(std::string name) : ImWindow(name) {
     open = false;
-    gui_new_project_project_name = new char[256];
 }
 
 ImWindowNewProject::~ImWindowNewProject() {
@@ -18,7 +18,7 @@ void ImWindowNewProject::Draw() {
     ImGui::Begin("New Project", &open, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
         ImGui::Text("Create a new project");
         ImGui::Separator();
-        ImGui::InputText("Project Name", gui_new_project_project_name, 256);
+        ImGui::InputText("Project Name", &gui_new_project_project_name);
         ImGui::Separator();
         if (ImGui::Button("Create")) {
             // Create the project
@@ -26,7 +26,7 @@ void ImWindowNewProject::Draw() {
                 ara::Project project(gui_new_project_project_name);
 
                 GetProjectManager()->AddProject(project);
-                gui_new_project_project_name = {};
+                gui_new_project_project_name = "";
                 open = false;
             }
         }

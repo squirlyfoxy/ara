@@ -8,6 +8,6 @@ public:
     virtual void Draw();
 
 private:
-    char* gui_new_project_project_name;
+    std::string gui_new_project_project_name = "";
 
 };

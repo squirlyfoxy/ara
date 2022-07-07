@@ -1,7 +1,5 @@
 #include "gui_menu.h"
 
-#include "imgui_stdlib.h"
-
 #include "gui/gui.h"
 
 // Entities
@@ -25,6 +23,7 @@
 #include <memory>
 
 #include "imgui.h"
+#include "imgui_stdlib.h"
 
 ImWindowOpenProject *gui_project_open_popup = new ImWindowOpenProject("Open Project");
 ImWindowNewProject *gui_project_new_popup = new ImWindowNewProject("New Project");

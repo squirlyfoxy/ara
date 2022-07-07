@@ -1,5 +1,7 @@
 #include "entity_sprite.h"
 
+#include <lib/json.hpp>
+
 #include "utils_transforms.h"
 #include "shader.h"
 #include "gl_global_buffers.h"

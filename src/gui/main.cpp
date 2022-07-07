@@ -37,6 +37,9 @@ int main() {
     // Move only when using the title bar
     io.ConfigWindowsMoveFromTitleBarOnly = true;
 
+    // Enable docking
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 

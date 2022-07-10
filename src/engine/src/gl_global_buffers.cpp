@@ -43,10 +43,10 @@ namespace ara {
 
         float vertices[] = {
             // positions          // texture coords
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f
+            -0.5f, -0.5f, 0.0f,     0.0f, 0.0f,
+            0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
+            0.5f, 0.5f, 0.0f,       1.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f,      0.0f, 1.0f
         };
         unsigned int indices[] = {  // note that we start from 0!
             0, 1, 3,   // first triangle

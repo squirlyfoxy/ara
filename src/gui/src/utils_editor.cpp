@@ -16,7 +16,7 @@ float gZoom = 500.0f;
 float posX = 0.0f;
 float posY = 0.0f;
 
-bool cantMove = false;
+//bool cantMove = false;
 
 glm::mat4 GetEditorProjectionMatrix() {
     // 800x600
@@ -45,7 +45,6 @@ float GetCameraPositionY() {
     return posY;
 }
 
-static float velocity = 1.0f;
 static float zoom_velocity = 10.0f;
 
 void ZoomCamera(float delta) {
@@ -53,44 +52,10 @@ void ZoomCamera(float delta) {
 }
 
 void MoveCamera(float _posX, float _posY) {
-    if (cantMove) return;
+    //if (cantMove) return;
 
     posX = _posX;
     posY = _posY;
-}
-
-void CameraMovedCallback(ara::InputManager* inputManager) {
-    if (cantMove) return;
-    
-    // IF ctrl + wasd
-    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_W)) {
-        MoveCamera(GetCameraPositionX(), GetCameraPositionY() + velocity);
-    }
-
-    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_S)) {
-        MoveCamera(GetCameraPositionX(), GetCameraPositionY() - velocity);
-    }
-
-    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_A)) {
-        MoveCamera(GetCameraPositionX() + velocity, GetCameraPositionY());
-    }
-
-    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_D)) {
-        MoveCamera(GetCameraPositionX() - velocity, GetCameraPositionY());
-    }
-}
-
-void CameraScrollCallback(ara::InputManager* inputManager) {
-    // If we are scrolling, we can't move the camera
-    cantMove = true;
-
-    float yoffset = inputManager->GetScrollY();
-
-    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL)) {
-        ZoomCamera(yoffset);
-    }
-
-    cantMove = false;
 }
 
 void Save() {

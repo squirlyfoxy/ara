@@ -9,6 +9,8 @@
 #include "gui_explorer.h"
 #include "gui_entities.h"
 
+#include "utils_editor.h"
+
 #include "project_manager.h"
 
 #include "lib/json.hpp"
@@ -216,4 +218,45 @@ void SceneEditorMousePicking(ara::InputManager* inputManager) {
         }
     }
 
+}
+
+bool cantMove = false;
+static float velocity = 1.0f;
+
+void CameraMovedCallback(ara::InputManager* inputManager) {
+    if (GetProjectManager()->GetCurrentProject() == nullptr) return;
+    if (!we_are_over_scene) return;
+    
+    // IF ctrl + wasd
+    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_W)) {
+        MoveCamera(GetCameraPositionX(), GetCameraPositionY() + velocity);
+    }
+
+    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_S)) {
+        MoveCamera(GetCameraPositionX(), GetCameraPositionY() - velocity);
+    }
+
+    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_A)) {
+        MoveCamera(GetCameraPositionX() + velocity, GetCameraPositionY());
+    }
+
+    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_D)) {
+        MoveCamera(GetCameraPositionX() - velocity, GetCameraPositionY());
+    }
+}
+
+void CameraScrollCallback(ara::InputManager* inputManager) {
+    if (GetProjectManager()->GetCurrentProject() == nullptr) return;
+    if (!we_are_over_scene) return;
+
+    // If we are scrolling, we can't move the camera
+    cantMove = true;
+
+    float yoffset = inputManager->GetScrollY();
+
+    if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL)) {
+        ZoomCamera(yoffset);
+    }
+
+    cantMove = false;
 }

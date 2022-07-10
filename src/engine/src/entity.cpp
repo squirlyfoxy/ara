@@ -12,6 +12,7 @@
 #include "entity_square.h"
 #include "entity_empty.h"
 #include "entity_text.h"
+#include "entity_sprite.h"
 
 #include "gui/gui.h"
 
@@ -33,6 +34,8 @@ namespace ara {
         mName = name;
         mPosition = position;
         mUid = sEntityCount++;
+
+        mSize = glm::vec2(1.0f, 1.0f);
     }
 
     Entity::~Entity() {
@@ -107,13 +110,22 @@ namespace ara {
 
         // Position
         ImGui::Text("Position");
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "X");
         ImGui::SameLine();
-        ImGui::InputFloat2("##Position", glm::value_ptr(mPosition));
+        ImGui::InputFloat("##Xpos", &mPosition.x, 0.0f, 0.0f, "%.2f");
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Y");
+        ImGui::SameLine();
+        ImGui::InputFloat("##Ypos", &mPosition.y, 0.0f, 0.0f, "%.2f");
 
         // Size
         ImGui::Text("Size");
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "X");
         ImGui::SameLine();
-        ImGui::InputFloat2("##Size", glm::value_ptr(mSize));
+        ImGui::InputFloat("##Xsize", &mSize.x, 0.0f, 0.0f, "%.2f");
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Y");
+        ImGui::SameLine();
+        ImGui::InputFloat("##Ysize", &mSize.y, 0.0f, 0.0f, "%.2f");
+
 
         ImGui::Separator();
         ImGui::Text("Entity Specifics");
@@ -175,6 +187,8 @@ namespace ara {
             entity = new EntityEmpty();
         } else if (type == "EntityText") {
             entity = new EntityText();
+        } else if (type == "EntitySprite") {
+            entity = new EntitySprite();
         } else {
             // TODO: ERROR
 

@@ -28,7 +28,7 @@ namespace ara {
         void Init();
 
         std::vector<Texture*> mTextures;
-        unsigned int mFPS = 0; // if 0 not animated
+        int mFPS = 0; // if 0 not animated
         unsigned int mCurrentFrame = 0;
 
     };

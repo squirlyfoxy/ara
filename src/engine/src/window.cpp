@@ -89,6 +89,10 @@ namespace ara
 
         glEnable(GL_CULL_FACE);
         glClampColor(GL_CLAMP_READ_COLOR, GL_FIXED_ONLY);
+
+        // enable blending
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void Window::Update()

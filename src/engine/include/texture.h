@@ -12,6 +12,7 @@ namespace ara {
         ~Texture();
 
         unsigned int GetId() const;
+        std::string GetPath() const;
 
         void Bind(int unit = 0);
     private:

@@ -26,6 +26,10 @@ namespace ara {
         return mId;
     }
 
+    std::string Texture::GetPath() const {
+        return mPath;
+    }
+
     void Texture::Bind(int unit) {
         glActiveTexture(GL_TEXTURE0 + unit);
         glBindTexture(GL_TEXTURE_2D, mId);

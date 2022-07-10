@@ -59,6 +59,8 @@ namespace ara {
         glDeleteRenderbuffers(1, &mRBO);
         glDeleteTextures(mTextures.size(), mTexturesID);
 
+        mTexturesID = new unsigned int[mTextures.size()];
+
         Init();
     }
 

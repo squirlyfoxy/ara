@@ -178,6 +178,12 @@ namespace ara {
             fs->write("Scene ", 6);
             fs->write(project.gScenes[i].GetName().c_str(), project.gScenes[i].GetName().size());
             fs->write("\n", 1);
+
+            // If first time saving this scene, create the assets folder
+            if (!fs::exists("./projects/" + project.mName + "/" + project.gScenes[i].GetName() + "/assets")) {
+                fs::create_directory("./projects/" + project.mName + "/" + project.gScenes[i].GetName() + "/assets");
+                fs::create_directory("./projects/" + project.mName + "/" + project.gScenes[i].GetName() + "/assets/textures");
+            }
         }
         #endif
     }

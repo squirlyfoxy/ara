@@ -52,6 +52,10 @@ namespace ara {
     void Scene::AddEntity(Entity *entity) {
         gEntities.push_back(entity);
 
+        // TODO: Add the entity to the physics engine
+
+        // TODO: Render order (texts at the end)
+
         // Add the entity to the entities list
         CustomerData data = ARA_GET_CUSTOMER_DATA("entities");
 

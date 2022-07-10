@@ -93,6 +93,10 @@ void gui_render_scene_editor(ara::Scene s) {
         
             first_frame = false;
             old_scene_name = s.GetName();
+        } else {
+            //mSceneEditorFramebuffer->ChangeSize(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+
+            // TODO: RESIZE THE FRAMEBUFFER IF THE WINDOW IS RESIZED
         }
 
         viewport_bounds[0] = glm::vec2(pos.x, pos.y);
@@ -101,7 +105,7 @@ void gui_render_scene_editor(ara::Scene s) {
         ImGui::GetWindowDrawList()->AddImage(
             (ImTextureID)mSceneEditorFramebuffer->GetTexture(0),
             ImVec2(pos.x, pos.y),
-            ImVec2(pos.x + 800, pos.y + 600)
+            ImVec2(pos.x + GetWindowWidth(), pos.y + GetWindowHeight())
         );
     ImGui::End();
 

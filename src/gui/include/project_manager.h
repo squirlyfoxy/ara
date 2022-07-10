@@ -19,16 +19,16 @@ public:
 
     void RenderProjectEditor();
 
-    std::map<std::string, ara::Project> GetProjects();
+    std::vector<std::string> GetProjects();
 
 private:
     std::string mCurrentProject;
-
-    std::map<std::string, ara::Project> mProjects;
+    ara::Project mCurrentProjectData;
+    
+    std::vector<std::string> mProjects;
 
     void CreateProjectEnviroment(ara::Project project);
 };
 
 ProjectManager* GetProjectManager();
 
-#define GET_PROJECT(...) GetProjectManager()->GetProjects()[__VA_ARGS__]

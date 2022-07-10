@@ -42,46 +42,17 @@ ProjectManager::ProjectManager() {
         // Get the project creation time
         std::string projectCreationTime = query.getColumn(2);
 
-        // Create a new project
-        ara::Project project;
-        project = ara::Project::ReadProject(projectPath + "/" + projectName + ".ara");
-
         // Add the project to the map
-        mProjects[projectName] = project;
+        mProjects.push_back(projectName);
         //mCurrentProject = projectName;
-    }
-
-    // Clean up project
-    for (auto& project : mProjects) {
-        for (auto& scene : project.second.gScenes) {
-            std::string path = "./projects/" + project.second.GetName() + "/" + scene.GetName();
-
-            std::vector<ara::File> files = ara::GetFilesByExtension(path, ".ent");
-            
-            // Loop through all entities
-            for (auto& ent : scene.GetEntities()) {
-                std::string ent_path = path + "/" + ent->GetName() + ".ent";
-
-                // Remove ent_path from files
-                for (auto& file : files) {
-                    if (file.Path == ent_path) {
-                        files.erase(std::remove(files.begin(), files.end(), file), files.end());
-                        break;
-                    }
-                }
-            }
-
-            // Remove all files that are not entities
-            for (auto& file : files) {
-                fs::remove(file.Path);
-            }
-        }
     }
 
     // Set the current edited
     ara::CustomerData engine;
     engine.mData["current_path"] = "./projects/";
-    ARA_SET_CUSTOMER_DATA("engine", engine);
+    engine.mData["current_project"] = "";
+    engine.mData["current_scene"] = "";
+    ARA_SET_CUSTOMER_DATA("engine_gui", engine);
 
     ara::SetProjectionCallback(std::bind(GetEditorProjectionMatrix));
     ara::SetViewCallback(std::bind(GetEditorViewMatrix));
@@ -95,21 +66,70 @@ ara::Project* ProjectManager::GetCurrentProject() {
         return nullptr;
     }
 
-    return &mProjects[mCurrentProject];
+    return &mCurrentProjectData;
 }
 
 void ProjectManager::SetCurrentProject(std::string projectName) {
     // Check if project exists
-    if (mProjects.find(projectName) == mProjects.end()) {
+    bool projectExists = false;
+    for (auto& p : mProjects) {
+        if (p == projectName) {
+            projectExists = true;
+        }
+    }
+    if (!projectExists) {
         return;
     }
 
     mCurrentProject = projectName;
+    mCurrentProjectData = ara::Project::ReadProject("./projects/" + projectName + "/" + projectName + ".ara");
+    if (!mCurrentProjectData.Validate()) {
+        std::cout << "Project is invalid" << std::endl;
+        mCurrentProjectData = ara::Project();
+        return;
+    }
+
+    // Cleanup
+    for (auto &scene : mCurrentProjectData.gScenes)
+    {
+        std::string path = "./projects/" + mCurrentProjectData.GetName() + "/" + scene.GetName();
+
+        std::vector<ara::File> files = ara::GetFilesByExtension(path, ".ent");
+
+        // Loop through all entities
+        for (auto &ent : scene.GetEntities())
+        {
+            std::string ent_path = path + "/" + ent->GetName() + ".ent";
+
+            // Remove ent_path from files
+            for (auto &file : files)
+            {
+                if (file.Path == ent_path)
+                {
+                    files.erase(std::remove(files.begin(), files.end(), file), files.end());
+                    break;
+                }
+            }
+        }
+
+        // Remove all files that are not entities
+        for (auto &file : files)
+        {
+            fs::remove(file.Path);
+        }
+    }
 
     // Set the current scene
-    if (mProjects[projectName].gScenes.size() > 0) {
-        mProjects[projectName].SetCurrentScene(mProjects[projectName].gScenes[0].GetName());
+    if (mCurrentProjectData.gScenes.size() > 0) {
+        mCurrentProjectData.SetCurrentScene(mCurrentProjectData.gScenes[0].GetName());
     }
+
+    // Update the engine gui data
+    ara::CustomerData engine;
+    engine.mData["current_path"] = "./projects/" + projectName + "/";
+    engine.mData["current_project"] = projectName;
+    engine.mData["current_scene"] = mCurrentProjectData.GetCurrentScene()->GetName();
+    ARA_SET_CUSTOMER_DATA("engine_gui", engine);
 }
 
 int ProjectManager::GetProjectCount() {
@@ -140,14 +160,16 @@ void ProjectManager::CreateProjectEnviroment(ara::Project project) {
 
 void ProjectManager::AddProject(ara::Project project) {
     // Add the given project to the list of projects, if already exists, return
-    if (mProjects.find(project.GetName()) != mProjects.end()) {
-        return;
+    for (auto& p : mProjects) {
+        if (p == project.GetName()) {
+            return;
+        }
     }
 
     CreateProjectEnviroment(project);
 
     // Add the project to the list of projects
-    mProjects[project.GetName()] = project;
+    mProjects.push_back(project.GetName());
 }
 
 void ProjectManager::RenderProjectEditor() {
@@ -160,7 +182,7 @@ void ProjectManager::RenderProjectEditor() {
     gui_render_scene_editor(*GetCurrentProject()->GetCurrentScene());
 }
 
-std::map<std::string, ara::Project> ProjectManager::GetProjects() {
+std::vector<std::string> ProjectManager::GetProjects() {
     return mProjects;
 }
 

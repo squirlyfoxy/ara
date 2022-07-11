@@ -21,7 +21,7 @@ namespace ara {
         virtual void CustomLoad(std::istringstream& file);
 
     private:
-
+        int mSelected_font_size = 0;
         ara::Text* mTextEntity;
 
         void Init();

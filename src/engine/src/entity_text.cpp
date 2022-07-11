@@ -30,7 +30,11 @@ namespace ara {
         mTextEntity->Render(true);
     }
 
-    int selected_font_size = 0;
+    // Possible dimensions: 10, 12, 14, 16... to 48
+    static std::vector<const char*> font_sizes = {
+        "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48"
+    };
+
     void EntityText::Edit() {
         BasicEdit();
 
@@ -38,22 +42,18 @@ namespace ara {
         ImGui::SameLine();
         ImGui::InputText("##Text", &mTextEntity->mText);
 
-        // Possible dimensions: 10, 12, 14, 16... to 48
-        std::vector<const char*> font_sizes = {
-            "10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48"
-        };
         // selected_font_size is equal to the size of the text * 10000, this is because ImGui::Combo() works with ints
         int to_find = mTextEntity->mSize * 10000;
         for (int i = 0; i < font_sizes.size(); i++) {
             if (atoi(font_sizes[i]) == to_find) {
-                selected_font_size = i;
+                mSelected_font_size = i;
                 break;
             }
         }
 
         ImGui::Text("Size");
         ImGui::SameLine();
-        ImGui::Combo("##Size", &selected_font_size, font_sizes.data(), font_sizes.size());
+        ImGui::Combo("##Size", &mSelected_font_size, font_sizes.data(), font_sizes.size());
 
         auto fonts = ara::conf::GetFnts();
         int selected_font = std::find(fonts.begin(), fonts.end(), mTextEntity->mFont) - fonts.begin();
@@ -66,7 +66,7 @@ namespace ara {
         ImGui::Combo("##Font", &selected_font, font_names.data(), fonts.size());
         mTextEntity->mFont = fonts[selected_font];
 
-        mTextEntity->mSize = std::stof(font_sizes[selected_font_size]) / 10000.0f;
+        mTextEntity->mSize = std::stof(font_sizes[mSelected_font_size]) / 10000.0f;
     }
 
     void EntityText::SetText(const std::string& text) {

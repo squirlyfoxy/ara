@@ -41,7 +41,7 @@ namespace ara {
 
         sSquareShader->SetMat4("view", GetView());
         sSquareShader->SetMat4("proj", GetProjection());
-        sSquareShader->SetMat4("model", model);
+        sSquareShader->SetMat4("model", GetModelMatrix());
         sSquareShader->SetInt("u_uid", (int)GetUid());
 
         sSquareShader->SetVec3("u_color", gColor);

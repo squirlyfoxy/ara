@@ -52,13 +52,9 @@ namespace ara {
         sSpriteShader->Use();
         mTextures[mCurrentFrame]->Bind(0);
 
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(mPosition.x, mPosition.y, 0.0f));
-        model = glm::scale(model, glm::vec3(mSize.x, mSize.y, 1.0f));
-
         sSpriteShader->SetMat4("view", GetView());
         sSpriteShader->SetMat4("proj", GetProjection());
-        sSpriteShader->SetMat4("model", model);
+        sSpriteShader->SetMat4("model", GetModelMatrix());
         sSpriteShader->SetInt("u_uid", (int)GetUid());
 
         glBindVertexArray(GetGBuffer("sq_buffer")->buffers[ARA_GLOBAL_BUFFER_VAO_LOCATION]);
@@ -90,7 +86,7 @@ namespace ara {
             mFPS = 0;
 
             if (files.size() == 0) {
-                ImGui::Text("No textures found");
+                ImGui::Text("No textures found, please import them");
             } else {
                 ImGui::Text("Choose a texture");
                 ImGui::Separator();

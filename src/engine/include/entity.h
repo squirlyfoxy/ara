@@ -37,6 +37,7 @@ namespace ara {
         const unsigned int GetUid() const;
         const std::string& GetType() const;
         const glm::vec2& GetSize() const;
+        glm::mat4 GetModelMatrix();
 
         // Setters
         void SetName(const std::string& name);

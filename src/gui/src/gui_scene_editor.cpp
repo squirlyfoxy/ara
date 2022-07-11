@@ -76,33 +76,29 @@ int GetWindowHeight() {
 }
 
 bool first_frame = true;
-std::string old_scene_name = "";
 
 bool we_are_over_scene = false;
 ImVec2 scene_editor_window_pos;
 glm::vec2 viewport_bounds[2];
 
+ImVec2 old_size;
+
 void gui_render_scene_editor(ara::Scene s) {
-    ImGui::Begin(std::string("Scene Editor - " + s.GetName()).c_str(), nullptr, ImGuiWindowFlags_NoResize);
+    ImGui::Begin(std::string("Scene Editor - " + s.GetName()).c_str(), nullptr);
         // Render the texture  
         we_are_over_scene = ImGui::IsWindowHovered();
         ImVec2 pos = ImGui::GetCursorScreenPos();
         scene_editor_window_pos = pos;
 
-        if (first_frame || old_scene_name != s.GetName()) {
-            ImGui::SetWindowPos(ImVec2(1, 20));
-            ImGui::SetWindowSize(ImVec2(GetWindowWidth(), GetWindowHeight()));
+        if (old_size.x != ImGui::GetWindowSize().x ||
+            old_size.y != ImGui::GetWindowSize().y) {
+            mSceneEditorFramebuffer->ChangeSize(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);        
         
-            first_frame = false;
-            old_scene_name = s.GetName();
-        } else {
-            //mSceneEditorFramebuffer->ChangeSize(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+            old_size = ImGui::GetWindowSize();
 
-            // TODO: RESIZE THE FRAMEBUFFER IF THE WINDOW IS RESIZED
+            viewport_bounds[0] = glm::vec2(pos.x, pos.y);
+            viewport_bounds[1] = glm::vec2(pos.x + GetWindowWidth(), pos.y + GetWindowHeight());
         }
-
-        viewport_bounds[0] = glm::vec2(pos.x, pos.y);
-        viewport_bounds[1] = glm::vec2(pos.x + GetWindowWidth(), pos.y + GetWindowHeight());
 
         ImGui::GetWindowDrawList()->AddImage(
             (ImTextureID)mSceneEditorFramebuffer->GetTexture(0),
@@ -159,7 +155,7 @@ void SceneEditorMousePicking(ara::InputManager* inputManager) {
 
     // check if the mouse is over the scene editor
     if (!we_are_over_scene) { // if no
-        // if left button is pressed, deselect
+        // if right button is pressed, deselect
 
         if (inputManager->IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
             // deselect entity
@@ -179,16 +175,10 @@ void SceneEditorMousePicking(ara::InputManager* inputManager) {
 
     glm::vec2 viewportSize = viewport_bounds[1] - viewport_bounds[0];
     
-    float x = inputManager->GetMouseX();
-    float y = inputManager->GetMouseY();
+    float x = ((inputManager->GetMouseX() - viewport_bounds[0].x) / viewportSize.x) * GetWindowWidth();
+    float y = ((inputManager->GetMouseY() - viewport_bounds[0].y) / viewportSize.y) * GetWindowHeight();
 
-    x = (x - viewport_bounds[0].x) / viewportSize.x;
-    y = (y - viewport_bounds[0].y) / viewportSize.y;
-
-    int mx = (int)(x * GetWindowWidth());
-    int my = (int)(y * GetWindowHeight());
-
-    int val = mSceneEditorFramebuffer->ReadPixel(1, mx, my);
+    int val = mSceneEditorFramebuffer->ReadPixel(1, (int)x, (int)y);
 
     // Loop thorught the entities and check if the mouse is over them
     // use 2d picking to check if the mouse is over an entity
@@ -199,35 +189,31 @@ void SceneEditorMousePicking(ara::InputManager* inputManager) {
         
         if (val == entity->GetUid()) {
             // Set the selected entity
-            if (inputManager->IsMouseButtonPressed(0)) { // left, select
+            if (inputManager->IsMouseButtonPressed(0) && !j["if_selected"]) { // left, select
                 j["if_selected"] = true;
                 ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()] = j.dump();
 
                 return;
-            } else if (inputManager->IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) { // right, deselect
-                j["if_selected"] = false;
-                ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()] = j.dump();
+            }
+        }
 
-                return;
-            }
-        } else if (val != -1 && j["if_selected"]) {
-            if (inputManager->IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) { // right, deselect
-                j["if_selected"] = false;
-                ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()] = j.dump();
-            }
+        if (inputManager->IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && j["if_selected"]) { // right, deselect
+            j["if_selected"] = false;
+            ARA_GET_CUSTOMER_DATA("entities").mData[entity->GetName()] = j.dump();
+        
+            return;
         }
     }
 
 }
 
-bool cantMove = false;
 static float velocity = 1.0f;
 
 void CameraMovedCallback(ara::InputManager* inputManager) {
     if (GetProjectManager()->GetCurrentProject() == nullptr) return;
     if (!we_are_over_scene) return;
     
-    // IF ctrl + wasd
+    // IF l_ctrl + wasd
     if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL) && inputManager->IsKeyPressed(KEY_W)) {
         MoveCamera(GetCameraPositionX(), GetCameraPositionY() + velocity);
     }
@@ -249,14 +235,9 @@ void CameraScrollCallback(ara::InputManager* inputManager) {
     if (GetProjectManager()->GetCurrentProject() == nullptr) return;
     if (!we_are_over_scene) return;
 
-    // If we are scrolling, we can't move the camera
-    cantMove = true;
-
     float yoffset = inputManager->GetScrollY();
 
     if (inputManager->IsKeyPressed(KEY_LEFT_CONTROL)) {
         ZoomCamera(yoffset);
     }
-
-    cantMove = false;
 }

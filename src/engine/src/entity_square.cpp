@@ -35,10 +35,6 @@ namespace ara {
 
         sSquareShader->Use();
 
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(mPosition.x, mPosition.y, 0.0f));
-        model = glm::scale(model, glm::vec3(mSize.x, mSize.y, 1.0f));
-
         sSquareShader->SetMat4("view", GetView());
         sSquareShader->SetMat4("proj", GetProjection());
         sSquareShader->SetMat4("model", GetModelMatrix());

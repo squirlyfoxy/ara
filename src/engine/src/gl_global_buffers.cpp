@@ -53,7 +53,7 @@ namespace ara {
             1, 2, 3    // second triangle
         };
 
-        RegisterGBuffer("sq_buffer", 3, [&](GBuffer* buffer) {
+        RegisterGBuffer("sq_buffer", 3, [vertices, indices](GBuffer* buffer) {
             glGenVertexArrays(1, &buffer->buffers[ARA_GLOBAL_BUFFER_VAO_LOCATION]);
             glGenBuffers(1, &buffer->buffers[ARA_GLOBAL_BUFFER_VBO_LOCATION]);
             glGenBuffers(1, &buffer->buffers[ARA_GLOBAL_BUFFER_EBO_LOCATION]);

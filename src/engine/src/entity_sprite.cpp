@@ -30,6 +30,7 @@ namespace ara {
         mName = "Sprite";
 
         Init();
+        canBeSelected = true;
 
         // Edit modalities
         mEditModalities = {
@@ -47,7 +48,7 @@ namespace ara {
     }
 
     void EntitySprite::Render(bool selected) {
-        //if (selected) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        if (selected) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         sSpriteShader->Use();
         mTextures[mCurrentFrame]->Bind(0);
@@ -61,7 +62,7 @@ namespace ara {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
-        //if (selected) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        if (selected) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
     void EntitySprite::Edit() {
